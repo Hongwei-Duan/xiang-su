@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>作品详情 · 像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			background: radial-gradient(circle at 18% 18%, rgba(124, 58, 237, 0.18), transparent 36%),
+				radial-gradient(circle at 82% 4%, rgba(14, 165, 233, 0.18), transparent 30%),
+				var(--bg);
+		}
+
+		.page {
+			padding: 40px 22px 64px;
+			gap: 18px;
+		}
+
+		header {
+			gap: 16px;
+			padding: 22px 26px;
+		}
+
+		header::after {
+			content: "DETAIL";
+			position: absolute;
+			right: -52px;
+			top: -26px;
+			font-size: 64px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(10deg);
+			pointer-events: none;
+		}
+
+		.hero {
+			display: grid;
+			gap: 10px;
+			min-width: 280px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: var(--font);
+			font-size: 21px;
+			letter-spacing: 1px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.hero h1 span {
+			display: inline-block;
+			padding: 6px 9px;
+			background: rgba(124, 58, 237, 0.14);
+			border: 1px solid rgba(168, 85, 247, 0.35);
+			border-radius: 6px;
+			color: var(--accent);
+		}
+
+		.hero p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.breadcrumbs {
+			color: var(--muted);
+			font-size: 13px;
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.breadcrumbs a {
+			color: var(--accent);
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			padding: 11px 15px;
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 18px;
+			align-items: start;
+		}
+
+		.section {
+			padding: 16px;
+		}
+
+		.section h2 {
+			margin: 0 0 12px;
+		}
+
+		.preview-box {
+			display: grid;
+			gap: 12px;
+		}
+
+		.grid-canvas {
+			display: grid;
+			grid-template-columns: repeat(16, minmax(0, 1fr));
+			gap: 3px;
+			background: rgba(255, 255, 255, 0.02);
+			padding: 12px;
+			border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+		}
+
+		.pixel-cell {
+			width: 100%;
+			padding-top: 100%;
+			background: #111827;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.03);
+			pointer-events: auto;
+			cursor: default;
+			transition: transform var(--transition), border-color var(--transition);
+		}
+
+		.pixel-cell:hover {
+			transform: translateY(-2px);
+			border-color: rgba(124, 58, 237, 0.4);
+		}
+
+		.meta-grid {
+			display: grid;
+			gap: 8px;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.meta-item {
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.inventory {
+			display: grid;
+			gap: 12px;
+		}
+
+		.palette-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.color-chip {
+			width: 18px;
+			height: 18px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		}
+
+		.count {
+			font-weight: 700;
+			font-size: 13px;
+		}
+
+		.rarity {
+			padding: 4px 8px;
+			border-radius: 8px;
+			font-size: 12px;
+			letter-spacing: 0.3px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.label {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.tooltip {
+			position: fixed;
+			background: rgba(19, 28, 49, 0.96);
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: var(--shadow);
+			font-size: 12px;
+			color: var(--text);
+			pointer-events: none;
+			opacity: 0;
+			transform: translateY(4px);
+			transition: opacity 120ms ease, transform 120ms ease;
+			z-index: 10;
+			min-width: 180px;
+		}
+
+		.tooltip.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		footer {
+			margin-top: 8px;
+			padding: 12px 4px;
+		}
+
+		@media (max-width: 1024px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="hero">
+				<div class="breadcrumbs"><a href="index.html">首页</a> · <a href="market.html">市场</a> · <span>作品详情</span>
+				</div>
+				<h1><span>PIX</span> 作品详情</h1>
+				<p id="subtitle">只读预览：无法修改像素，仅查看作品信息与用色分布。</p>
+			</div>
+			<div class="actions">
+				<a class="btn" href="market.html">返回市场</a>
+				<a class="btn" href="create.html">去创作</a>
+				<button class="btn primary" id="purchaseBtn" type="button">购买</button>
+			</div>
+		</header>
+
+		<div class="layout">
+			<section class="section">
+				<h2>作品预览（16x16）</h2>
+				<div class="preview-box">
+					<div class="grid-canvas" id="canvas" aria-label="16x16 预览"></div>
+					<div class="meta-grid">
+						<div class="meta-item"><strong>作者</strong><br><span id="meta-author">加载中</span></div>
+						<div class="meta-item"><strong>状态</strong><br><span id="meta-status">加载中</span></div>
+						<div class="meta-item"><strong>价格</strong><br><span id="meta-price">加载中</span></div>
+						<div class="meta-item"><strong>上架时间</strong><br><span id="meta-listed">-</span></div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>用色统计（只读）</h2>
+				<div class="inventory" id="inventory"></div>
+			</section>
+		</div>
+
+		<footer>
+			<div>该页为只读预览，若需编辑请前往创作工坊。</div>
+			<div>操作：返回市场 / 去创作</div>
+		</footer>
+	</div>
+
+	<div class="tooltip" id="tooltip"></div>
+
+	<script>
+		const API_BASE = 'http://localhost:4000';
+		const params = new URLSearchParams(window.location.search);
+		const artworkId = params.get('id');
+		const tooltip = document.getElementById('tooltip');
+		const titleEl = document.querySelector('header h1');
+		const subtitleEl = document.getElementById('subtitle');
+		const metaAuthor = document.getElementById('meta-author');
+		const metaStatus = document.getElementById('meta-status');
+		const metaPrice = document.getElementById('meta-price');
+		const metaListed = document.getElementById('meta-listed');
+		const purchaseBtn = document.getElementById('purchaseBtn');
+
+		const paletteFallback = [
+			{ id: 'neon-cyan', name: '霓虹青', rarity: '稀有', rgb: '#0ea5e9', tone: '霓虹' },
+			{ id: 'neon-pink', name: '霓虹粉', rarity: '罕见', rgb: '#ef5da8', tone: '霓虹' },
+			{ id: 'neon-purple', name: '霓虹紫', rarity: '罕见', rgb: '#a855f7', tone: '霓虹' },
+			{ id: 'soft-yellow', name: '柔黄', rarity: '普通', rgb: '#f5d565', tone: '柔和' },
+			{ id: 'soft-coral', name: '珊瑚', rarity: '稀有', rgb: '#f58b7c', tone: '柔和' },
+			{ id: 'soft-mint', name: '薄荷', rarity: '普通', rgb: '#7ad9c1', tone: '柔和' },
+			{ id: 'retro-green', name: '复古绿', rarity: '普通', rgb: '#3ba56a', tone: '复古' },
+			{ id: 'retro-orange', name: '复古橙', rarity: '稀有', rgb: '#f97316', tone: '复古' },
+			{ id: 'retro-blue', name: '复古蓝', rarity: '普通', rgb: '#3b82f6', tone: '复古' },
+			{ id: 'earth-brown', name: '泥棕', rarity: '普通', rgb: '#8b5a2b', tone: '自然' },
+			{ id: 'leaf', name: '叶绿', rarity: '普通', rgb: '#22c55e', tone: '自然' },
+			{ id: 'sky', name: '天空', rarity: '稀有', rgb: '#38bdf8', tone: '自然' }
+		];
+
+		const rarityStyles = {
+			'普通': 'border-color: rgba(148,163,184,0.4); background: rgba(148,163,184,0.12); color: #cbd5e1;',
+			'稀有': 'border-color: rgba(14,165,233,0.4); background: rgba(14,165,233,0.12); color: #7dd3fc;',
+			'罕见': 'border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.12); color: #c084fc;'
+		};
+
+		let paletteMap = new Map(paletteFallback.map(p => [p.id, p]));
+		let paletteBase = new Map(paletteFallback.map(p => [p.id.replace(/-\d+$/, ''), p]));
+		let usageLookup = new Map();
+		let gridData = new Array(256).fill(null);
+		let artworkStatus = 'draft';
+		let artworkPrice = null;
+
+		const baseId = (id) => (id ? id.replace(/-\d+$/, '') : '');
+
+		const getColorMeta = (id) => {
+			if (!id) return null;
+			const direct = paletteMap.get(id) || usageLookup.get(id);
+			if (direct) return direct;
+			const bid = baseId(id);
+			if (paletteBase.has(bid)) return paletteBase.get(bid);
+			for (const entry of usageLookup.values()) {
+				if (entry.name && paletteMap.has(entry.name)) return paletteMap.get(entry.name);
+			}
+			return null;
+		};
+
+		let hoverTimer = null;
+
+		const showTooltip = (event, colorId) => {
+			let content = '';
+			if (colorId) {
+				const color = getColorMeta(colorId) || {};
+				const count = usageLookup.get(colorId)?.count || 0;
+				content = `<strong>${color.name || colorId}</strong><br>等级：${color.rarity || '未知'}<br>RGB：${color.rgb || '--'}<br>本作使用：${count}`;
+			} else {
+				content = '<strong>空白</strong><br>等级：无<br>RGB：无<br>本作使用：0';
+			}
+			tooltip.innerHTML = content;
+			const rect = event.target.getBoundingClientRect();
+			tooltip.style.left = `${rect.left + rect.width / 2 + 10}px`;
+			tooltip.style.top = `${rect.top + window.scrollY + 10}px`;
+			tooltip.classList.add('visible');
+		};
+
+		const hideTooltip = () => {
+			tooltip.classList.remove('visible');
+		};
+
+		const renderGrid = () => {
+			const canvas = document.getElementById('canvas');
+			canvas.innerHTML = '';
+			gridData.forEach((id) => {
+				const cell = document.createElement('div');
+				cell.className = 'pixel-cell';
+				const meta = getColorMeta(id);
+				if (meta && meta.rgb) cell.style.background = meta.rgb;
+				cell.addEventListener('mouseenter', (e) => {
+					hoverTimer = setTimeout(() => showTooltip(e, id), 180);
+				});
+				cell.addEventListener('mouseleave', () => {
+					clearTimeout(hoverTimer);
+					hideTooltip();
+				});
+				cell.addEventListener('mousemove', (e) => {
+					if (!tooltip.classList.contains('visible')) return;
+					const rect = e.target.getBoundingClientRect();
+					tooltip.style.left = `${rect.left + rect.width / 2 + 10}px`;
+					tooltip.style.top = `${rect.top + window.scrollY + 10}px`;
+				});
+				canvas.appendChild(cell);
+			});
+		};
+
+		const renderUsage = () => {
+			const inventory = document.getElementById('inventory');
+			inventory.innerHTML = '';
+			if (!usageLookup.size) {
+				inventory.innerHTML = '<div class="label" style="color: var(--muted);">暂无用色数据</div>';
+				return;
+			}
+			Array.from(usageLookup.values()).sort((a, b) => (b.count || 0) - (a.count || 0)).forEach(entry => {
+				const el = document.createElement('div');
+				el.className = 'palette-item';
+				const style = rarityStyles[entry.rarity] || '';
+				el.innerHTML = `
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="color-chip" style="background:${entry.rgb};"></div>
+            <div>
+              <div style="font-weight:700;">${entry.name || entry.id}</div>
+              <div class="label">RGB ${entry.rgb || '--'}</div>
+            </div>
+          </div>
+          <div style="display:grid;gap:6px;justify-items:end;">
+            <span class="count">x${entry.count || 0}</span>
+            <span class="rarity" style="${style}">${entry.rarity || '未知'}</span>
+          </div>`;
+				inventory.appendChild(el);
+			});
+		};
+
+		const loadArtwork = async () => {
+			if (!artworkId) {
+				subtitleEl.textContent = '缺少作品 ID';
+				return;
+			}
+			subtitleEl.textContent = '加载中...';
+			const res = await fetch(`${API_BASE}/artworks/public/${artworkId}`);
+			if (!res.ok) {
+				subtitleEl.textContent = '作品不存在或不可查看';
+				return;
+			}
+			const data = await res.json();
+			titleEl.innerHTML = `<span>PIX</span> ${data.title || '作品详情'}`;
+			subtitleEl.textContent = data.status === 'listed' ? '上架中 · 可购买' : '已售出 / 已下架';
+			metaAuthor.textContent = data.seller_handle ? `@${data.seller_handle}` : '-';
+			metaStatus.textContent = data.status || '-';
+			metaPrice.textContent = data.price != null ? `${data.price} 像素币` : '-';
+			metaListed.textContent = data.listed_at ? new Date(data.listed_at).toLocaleString() : '-';
+			artworkStatus = data.status || 'draft';
+			artworkPrice = data.price;
+			if (Array.isArray(data.data?.grid) && data.data.grid.length === 256) {
+				gridData = [...data.data.grid];
+			}
+			usageLookup = new Map();
+			if (Array.isArray(data.data?.usage)) {
+				data.data.usage.forEach(entry => {
+					if (!entry || !entry.id) return;
+					usageLookup.set(entry.id, entry);
+					const bid = baseId(entry.id);
+					if (bid && !paletteBase.has(bid)) paletteBase.set(bid, entry);
+				});
+			}
+			if (Array.isArray(data.data?.counts)) {
+				data.data.counts.forEach(entry => {
+					if (!entry || !entry.id) return;
+					paletteMap.set(entry.id, entry);
+					const bid = baseId(entry.id);
+					paletteBase.set(bid, entry);
+				});
+			}
+			renderGrid();
+			renderUsage();
+			purchaseBtn.style.display = data.status === 'listed' ? 'inline-flex' : 'none';
+		};
+
+		const purchase = async () => {
+			if (!artworkId) return;
+			const token = localStorage.getItem('token');
+			if (!token) {
+				alert('请先登录后购买');
+				return;
+			}
+			purchaseBtn.disabled = true;
+			purchaseBtn.textContent = '购买中...';
+			try {
+				const res = await fetch(`${API_BASE}/artworks/${artworkId}/purchase`, {
+					method: 'POST',
+					headers: { Authorization: `Bearer ${token}` }
+				});
+				if (!res.ok) {
+					const err = await res.json().catch(() => ({}));
+					alert(err.message || '购买失败');
+					return;
+				}
+				alert('购买成功');
+				await loadArtwork();
+			} finally {
+				purchaseBtn.disabled = false;
+				purchaseBtn.textContent = '购买';
+			}
+		};
+
+		document.addEventListener('DOMContentLoaded', () => {
+			purchaseBtn.addEventListener('click', purchase);
+			loadArtwork();
+		});
+	</script>
+
+	<script>
+		// Reload when returning via browser back/forward cache
+		window.addEventListener('pageshow', (e) => {
+			const navEntry = performance.getEntriesByType('navigation')[0];
+			if (e.persisted || navEntry?.type === 'back_forward') {
+				location.reload();
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>个人信息 · 像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			background: radial-gradient(circle at 20% 18%, rgba(124, 58, 237, 0.18), transparent 36%),
+				radial-gradient(circle at 80% 8%, rgba(14, 165, 233, 0.18), transparent 30%),
+				var(--bg);
+		}
+
+		.page {
+			padding: 40px 22px 64px;
+			gap: 18px;
+		}
+
+		header {
+			gap: 16px;
+			padding: 22px 26px;
+		}
+
+		.section {
+			margin-bottom: 14px;
+		}
+
+		header::after {
+			content: "PROFILE";
+			position: absolute;
+			right: -58px;
+			top: -28px;
+			font-size: 68px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(10deg);
+			pointer-events: none;
+		}
+
+		.hero {
+			display: grid;
+			gap: 10px;
+			min-width: 280px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: var(--font);
+			font-size: 21px;
+			letter-spacing: 1px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.hero h1 span {
+			display: inline-block;
+			padding: 6px 9px;
+			background: rgba(124, 58, 237, 0.14);
+			border: 1px solid rgba(168, 85, 247, 0.35);
+			border-radius: 6px;
+			color: var(--accent);
+		}
+
+		.hero p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.breadcrumbs {
+			color: var(--muted);
+			font-size: 13px;
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.breadcrumbs a {
+			color: var(--accent);
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			padding: 11px 15px;
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 18px;
+			align-items: start;
+		}
+
+		.profile-identity {
+			display: flex;
+			gap: 14px;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
+		.avatar.avatar-lg {
+			width: 72px;
+			height: 72px;
+			border-radius: 18px;
+			font-size: 20px;
+		}
+
+		.profile-meta strong {
+			display: block;
+			font-size: 18px;
+		}
+
+		.profile-meta span {
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.stat-grid {
+			display: grid;
+			gap: 10px;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		}
+
+		.stat-card {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			border-radius: 12px;
+			padding: 12px;
+			display: grid;
+			gap: 6px;
+		}
+
+		.stat-card .label {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.stat-card .value {
+			font-weight: 800;
+			font-size: 18px;
+		}
+
+		.stat-card .hint {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.badge-grid {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.badge.pill {
+			border-radius: 999px;
+			background: rgba(14, 165, 233, 0.12);
+			border-color: rgba(14, 165, 233, 0.4);
+			color: #7dd3fc;
+		}
+
+		.card .title {
+			font-weight: 700;
+			margin-bottom: 6px;
+		}
+
+		.activity {
+			display: grid;
+			gap: 10px;
+		}
+
+		.activity-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+			font-size: 13px;
+		}
+
+		.activity-item span:last-child {
+			color: var(--muted);
+		}
+
+		.notice {
+			display: grid;
+			gap: 8px;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.notice strong {
+			color: var(--text);
+		}
+
+		@media (max-width: 1024px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="hero">
+				<div class="breadcrumbs"><a href="index.html">首页</a> · <a href="market.html">市场</a> · <span>个人信息</span></div>
+				<h1><span>PIX</span> 个人信息</h1>
+				<p>查看你的创作数据、收藏、徽章与近期活动。</p>
+			</div>
+			<div class="actions">
+				<button class="btn" type="button">编辑资料</button>
+				<a class="btn" href="create.html">去创作</a>
+				<a class="btn primary" href="market.html">浏览市场</a>
+			</div>
+		</header>
+
+		<div class="layout">
+			<div class="main-column">
+				<section class="section">
+					<div class="profile-identity">
+						<div class="avatar avatar-lg">PX</div>
+						<div class="profile-meta">
+							<strong id="profile-handle">@pixelwalker</strong>
+							<span id="profile-balance">像素币 --</span>
+						</div>
+						<span class="badge pill">认证创作者</span>
+					</div>
+					<p class="hero p tagline">偏爱赛博霓虹与暖色像素日常，正在打造「像素城」系列合集。</p>
+					<div class="stat-grid">
+						<div class="stat-card">
+							<div class="label">创作数量</div>
+							<div class="value">42</div>
+							<div class="hint">近 30 天新增 6 个作品</div>
+						</div>
+						<div class="stat-card">
+							<div class="label">收藏作品</div>
+							<div class="value">128</div>
+							<div class="hint">含 12 个限量款</div>
+						</div>
+						<div class="stat-card">
+							<div class="label">成交额</div>
+							<div class="value">3.8 ETH</div>
+							<div class="hint">本月成交 5 单</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section">
+					<h2>创作与收藏</h2>
+					<div class="grid cols-2">
+						<div class="card">
+							<div class="meta"><span>我的创作</span><span>最近 3 个</span></div>
+							<div class="list">
+								<div class="list-item"><span>「光栅行者」</span><span class="badge">上架</span></div>
+								<div class="list-item"><span>「雨后光晕」</span><span class="badge">草稿</span></div>
+								<div class="list-item"><span>「城市脉冲」</span><span class="badge">已售</span></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="meta"><span>收藏夹</span><span>精选</span></div>
+							<div class="list">
+								<div class="list-item"><span>@neonfox · 「霓虹港」</span><span class="badge">赛博</span></div>
+								<div class="list-item"><span>@mintcube · 「8bit 机甲」</span><span class="badge">复古</span></div>
+								<div class="list-item"><span>@leaflab · 「林间晨雾」</span><span class="badge">自然</span></div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section">
+					<h2>荣誉徽章</h2>
+					<div class="badge-grid">
+						<span class="badge pill">连续创作 30 天</span>
+						<span class="badge pill">月度热门作者</span>
+						<span class="badge pill">收藏达人</span>
+						<span class="badge pill">复古主题专家</span>
+					</div>
+				</section>
+			</div>
+
+			<aside class="sidebar">
+				<section class="section">
+					<h2>近期活动</h2>
+					<div class="activity">
+						<div class="activity-item"><span>上架了「光栅行者」</span><span>2 分钟前</span></div>
+						<div class="activity-item"><span>收藏了 @retrocat 「珊瑚之光」</span><span>12 分钟前</span></div>
+						<div class="activity-item"><span>完成每日签到</span><span>今天 09:12</span></div>
+					</div>
+				</section>
+
+				<section class="section">
+					<h2>提醒与安全</h2>
+					<div class="notice">
+						<div><strong>双重认证</strong> 已开启 · 账户更安全</div>
+						<div><strong>同步到云端</strong> 已同步 5 分钟前</div>
+						<div><strong>创作草稿</strong> 还有 2 个未发布草稿</div>
+					</div>
+				</section>
+			</aside>
+		</div>
+
+		<footer>
+			<div>个人信息页只你可见，可随时在此查看创作进度与收藏。</div>
+			<div class="marquee" aria-label="profile-ticker">
+				<span>提示：草稿会自动保存 · 建议开启双重认证 · 每日签到可加积分 · </span>
+				<span>提示：草稿会自动保存 · 建议开启双重认证 · 每日签到可加积分 · </span>
+			</div>
+		</footer>
+	</div>
+
+		<script>
+			const API_BASE = 'http://localhost:4000';
+			const handleEl = document.getElementById('profile-handle');
+			const balanceEl = document.getElementById('profile-balance');
+
+			const renderProfile = (handle, balance) => {
+				const safeHandle = handle ? `@${handle}` : '@pixelwalker';
+				handleEl.textContent = safeHandle;
+				balanceEl.textContent = Number.isFinite(balance) ? `像素币 ${balance}` : '像素币 --';
+			};
+
+			const fetchProfile = async () => {
+				const token = localStorage.getItem('token');
+				if (!token) {
+					renderProfile(null, null);
+					return;
+				}
+				try {
+					const res = await fetch(`${API_BASE}/users/me`, {
+						headers: { Authorization: `Bearer ${token}` }
+					});
+					if (!res.ok) {
+						throw new Error('unauthorized');
+					}
+					const data = await res.json();
+					renderProfile(data?.handle || data?.email || null, data?.balance);
+				} catch (err) {
+					console.error('profile fetch failed', err);
+					localStorage.removeItem('token');
+					renderProfile(null, null);
+				}
+			};
+
+			document.addEventListener('DOMContentLoaded', fetchProfile);
+		</script>
+
+		<script>
+			// Reload when returning via browser back/forward cache
+			window.addEventListener('pageshow', (e) => {
+				const navEntry = performance.getEntriesByType('navigation')[0];
+				if (e.persisted || navEntry?.type === 'back_forward') {
+					location.reload();
+				}
+			});
+		</script>
+</body>
+
+</html>

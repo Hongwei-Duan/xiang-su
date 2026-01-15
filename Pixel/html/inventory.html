@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>个人仓库 · 像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			background: radial-gradient(circle at 18% 18%, rgba(124, 58, 237, 0.18), transparent 36%),
+				radial-gradient(circle at 78% 6%, rgba(14, 165, 233, 0.18), transparent 30%),
+				var(--bg);
+		}
+
+		.page {
+			padding: 40px 22px 64px;
+			gap: 18px;
+		}
+
+		header {
+			gap: 16px;
+			padding: 22px 26px;
+		}
+
+		.section {
+			margin-bottom: 14px;
+		}
+
+		header::after {
+			content: "STASH";
+			position: absolute;
+			right: -60px;
+			top: -28px;
+			font-size: 68px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(10deg);
+			pointer-events: none;
+		}
+
+		.hero {
+			display: grid;
+			gap: 10px;
+			min-width: 280px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: var(--font);
+			font-size: 21px;
+			letter-spacing: 1px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.hero h1 span {
+			display: inline-block;
+			padding: 6px 9px;
+			background: rgba(124, 58, 237, 0.14);
+			border: 1px solid rgba(168, 85, 247, 0.35);
+			border-radius: 6px;
+			color: var(--accent);
+		}
+
+		.hero p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.breadcrumbs {
+			color: var(--muted);
+			font-size: 13px;
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.breadcrumbs a {
+			color: var(--accent);
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			padding: 11px 15px;
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 18px;
+			align-items: start;
+		}
+
+		.stat-grid {
+			display: grid;
+			gap: 10px;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		}
+
+		.stat-card {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			border-radius: 12px;
+			padding: 12px;
+			display: grid;
+			gap: 6px;
+		}
+
+		.stat-card .label {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.stat-card .value {
+			font-weight: 800;
+			font-size: 18px;
+		}
+
+		.stat-card .hint {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.legend {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			color: var(--muted);
+			font-size: 12px;
+			align-items: center;
+		}
+
+		.legend .rarity {
+			padding: 4px 8px;
+			border-radius: 8px;
+			font-size: 12px;
+			letter-spacing: 0.3px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.inventory-grid {
+			display: grid;
+			gap: 10px;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		}
+
+		.stat-line {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.stat-line .btn {
+			margin-left: auto;
+		}
+
+		.stock-card {
+			display: grid;
+			grid-template-columns: auto 1fr auto;
+			align-items: center;
+			gap: 10px;
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.stock-main {
+			display: grid;
+			gap: 4px;
+		}
+
+		.color-chip {
+			width: 18px;
+			height: 18px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		}
+
+		.stock-title {
+			font-weight: 700;
+		}
+
+		.stock-sub {
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.count-badge {
+			padding: 6px 10px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			font-weight: 700;
+			font-size: 13px;
+		}
+
+		.activity {
+			display: grid;
+			gap: 10px;
+		}
+
+		.activity-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+			font-size: 13px;
+		}
+
+		.activity-item span:last-child {
+			color: var(--muted);
+		}
+
+		.notice {
+			display: grid;
+			gap: 8px;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.notice strong {
+			color: var(--text);
+		}
+
+		@media (max-width: 1024px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="hero">
+				<div class="breadcrumbs"><a href="index.html">首页</a> · <a href="market.html">市场</a> · <span>个人仓库</span></div>
+				<h1><span>PIX</span> 个人仓库</h1>
+				<p>查看你拥有的所有像素块，按类别分组，含颜色、等级与数量。</p>
+			</div>
+			<div class="actions">
+				<a class="btn" href="create.html">去创作</a>
+				<a class="btn" href="profile.html">个人信息</a>
+				<a class="btn primary" href="market.html">浏览市场</a>
+			</div>
+			<div class="badge" id="auth-state">状态检测中...</div>
+		</header>
+
+		<div class="layout">
+			<div class="main-column">
+				<section class="section">
+					<div class="stat-grid" id="stats"></div>
+					<div class="legend">
+						<span>稀有度图例：</span>
+						<span class="rarity" style="border-color: rgba(148,163,184,0.4); background: rgba(148,163,184,0.12); color: #cbd5e1;">普通</span>
+						<span class="rarity" style="border-color: rgba(14,165,233,0.4); background: rgba(14,165,233,0.12); color: #7dd3fc;">稀有</span>
+						<span class="rarity" style="border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.12); color: #c084fc;">罕见</span>
+					</div>
+				</section>
+
+				<section class="section">
+					<h2>我的像素块</h2>
+					<div class="inventory-grid" id="inventory"></div>
+				</section>
+
+				<section class="section">
+					<h2>我的画作</h2>
+					<div id="artworks-meta" class="label" style="margin-bottom:10px; color: var(--muted);">加载中...</div>
+					<div class="grid cols-2" id="artworks-grid"></div>
+				</section>
+			</div>
+
+			<aside class="sidebar">
+				<section class="section">
+					<h2>近期出入库</h2>
+					<div class="activity" id="activity"></div>
+				</section>
+				<section class="section">
+					<h2>提示与安全</h2>
+					<div class="notice">
+						<div><strong>同步到云端</strong> 已同步 3 分钟前</div>
+						<div><strong>低库存提醒</strong> 稀有色少于 5 颗会提醒</div>
+						<div><strong>仓库权限</strong> 仅你可见，支持导出 CSV</div>
+					</div>
+				</section>
+			</aside>
+		</div>
+
+		<footer>
+			<div>仓库实时更新你的像素块数量，创作与擦除都会同步。</div>
+			<div class="marquee" aria-label="inventory-ticker">
+				<span>提示：低库存请及时补给 · 稀有色优先锁定 · 支持导出 CSV · </span>
+				<span>提示：低库存请及时补给 · 稀有色优先锁定 · 支持导出 CSV · </span>
+			</div>
+		</footer>
+	</div>
+
+	<script>
+		const API_BASE = 'http://localhost:4000';
+		let palette = [];
+		const authState = document.getElementById('auth-state');
+		const artworksGrid = document.getElementById('artworks-grid');
+		const artworksMeta = document.getElementById('artworks-meta');
+		const setAuthState = (text) => {
+			if (authState) authState.textContent = text;
+		};
+
+		const rarityStyles = {
+			'普通': 'border-color: rgba(148,163,184,0.4); background: rgba(148,163,184,0.12); color: #cbd5e1;',
+			'稀有': 'border-color: rgba(14,165,233,0.4); background: rgba(14,165,233,0.12); color: #7dd3fc;',
+			'罕见': 'border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.12); color: #c084fc;'
+		};
+
+		const fallbackPalette = [
+			{ id: 'neon-cyan', name: '霓虹青', tone: '霓虹', rarity: '稀有', rgb: '#0ea5e9', count: 42 },
+			{ id: 'neon-pink', name: '霓虹粉', tone: '霓虹', rarity: '罕见', rgb: '#ef5da8', count: 24 },
+			{ id: 'neon-purple', name: '霓虹紫', tone: '霓虹', rarity: '罕见', rgb: '#a855f7', count: 18 },
+			{ id: 'soft-yellow', name: '柔黄', tone: '柔和', rarity: '普通', rgb: '#f5d565', count: 36 },
+			{ id: 'soft-coral', name: '珊瑚', tone: '柔和', rarity: '稀有', rgb: '#f58b7c', count: 28 },
+			{ id: 'soft-mint', name: '薄荷', tone: '柔和', rarity: '普通', rgb: '#7ad9c1', count: 30 },
+			{ id: 'retro-green', name: '复古绿', tone: '复古', rarity: '普通', rgb: '#3ba56a', count: 40 },
+			{ id: 'retro-orange', name: '复古橙', tone: '复古', rarity: '稀有', rgb: '#f97316', count: 22 },
+			{ id: 'retro-blue', name: '复古蓝', tone: '复古', rarity: '普通', rgb: '#3b82f6', count: 34 },
+			{ id: 'earth-brown', name: '泥棕', tone: '自然', rarity: '普通', rgb: '#8b5a2b', count: 26 },
+			{ id: 'leaf', name: '叶绿', tone: '自然', rarity: '普通', rgb: '#22c55e', count: 32 },
+			{ id: 'sky', name: '天空', tone: '自然', rarity: '稀有', rgb: '#38bdf8', count: 27 }
+		];
+
+		const loadPalette = async () => {
+			try {
+				const token = localStorage.getItem('token');
+				setAuthState(token ? '已登录：加载账户仓库...' : '未登录：使用演示数据');
+				const res = await fetch(`${API_BASE}/palettes`, {
+					headers: token ? { Authorization: `Bearer ${token}` } : {}
+				});
+				if (!res.ok) throw new Error('palette fetch failed');
+				const data = await res.json();
+				palette = Array.isArray(data.items) ? data.items : [];
+				setAuthState(token ? '已登录：已加载账户仓库' : '未登录：已加载演示数据');
+			} catch (err) {
+				console.warn('Using fallback palette, reason:', err.message);
+				palette = [...fallbackPalette];
+				setAuthState('未登录或加载失败：使用演示数据');
+			}
+		};
+
+		const inventoryEl = document.getElementById('inventory');
+		const statsEl = document.getElementById('stats');
+		const activityEl = document.getElementById('activity');
+		let artworks = [];
+
+		const renderStats = () => {
+			const totalAvailable = palette.reduce((sum, p) => sum + p.count, 0);
+			const rare = palette.filter(p => p.rarity === '稀有' || p.rarity === '罕见').reduce((s, p) => s + p.count, 0);
+			const tones = new Set(palette.map(p => p.tone)).size;
+			statsEl.innerHTML = '';
+			const cards = [
+				{ label: '可用像素块', value: totalAvailable, hint: '当前可直接使用' },
+				{ label: '稀有/罕见', value: rare, hint: '优先保留的稀缺色' },
+				{ label: '类别数量', value: tones, hint: '按主题分组的色盘' }
+			];
+			cards.forEach(({ label, value, hint }) => {
+				const card = document.createElement('div');
+				card.className = 'stat-card';
+				card.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div><div class="hint">${hint}</div>`;
+				statsEl.appendChild(card);
+			});
+		};
+
+		const renderInventory = () => {
+			inventoryEl.innerHTML = '';
+			const grouped = palette.reduce((acc, item) => {
+				(acc[item.tone] = acc[item.tone] || []).push(item);
+				return acc;
+			}, {});
+
+			Object.entries(grouped).forEach(([tone, items]) => {
+				const block = document.createElement('div');
+				block.className = 'card';
+				const toneAvailable = items.reduce((s, i) => s + i.count, 0);
+				block.innerHTML = `<div class="meta"><span>${tone}</span><span>可用 ${toneAvailable}</span></div><div class="title">${tone} 主题</div>`;
+				const grid = document.createElement('div');
+				grid.className = 'list';
+				items.forEach(item => {
+					const row = document.createElement('div');
+					row.className = 'stock-card';
+					row.innerHTML = `
+						<div class="color-chip" style="background:${item.rgb};"></div>
+						<div class="stock-main">
+							<div class="stock-title">${item.name}</div>
+							<div class="stock-sub">${item.rgb} · ${item.rarity}</div>
+						</div>
+						<div class="count-badge" style="${rarityStyles[item.rarity] || ''}">x${item.count}</div>
+					`;
+					grid.appendChild(row);
+				});
+				block.appendChild(grid);
+				inventoryEl.appendChild(block);
+			});
+		};
+
+		const renderActivity = () => {
+			const items = [
+				{ text: '入库 霓虹青 x8', time: '2 分钟前' },
+				{ text: '消耗 霓虹紫 x4 (创作)', time: '18 分钟前' },
+				{ text: '入库 柔黄 x6', time: '今天 09:12' }
+			];
+			activityEl.innerHTML = '';
+			items.forEach(({ text, time }) => {
+				const row = document.createElement('div');
+				row.className = 'activity-item';
+				row.innerHTML = `<span>${text}</span><span>${time}</span>`;
+				activityEl.appendChild(row);
+			});
+		};
+
+		const renderArtworks = () => {
+			artworksGrid.innerHTML = '';
+			const drafts = artworks.filter(a => a.status === 'draft');
+			const listed = artworks.filter(a => a.status === 'listed');
+			const sold = artworks.filter(a => a.status === 'sold');
+
+			const buildCard = (item) => {
+				let chip = '<span class="chip" style="background: rgba(148,163,184,0.12); border-color: rgba(148,163,184,0.35); color: #cbd5e1;">草稿</span>';
+				let metaStatus = '草稿';
+				if (item.status === 'listed') {
+					chip = `<span class="chip">上架 · ${item.price ?? 0} 像素币</span>`;
+					metaStatus = '上架';
+				} else if (item.status === 'sold') {
+					chip = '<span class="chip" style="background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.35); color: #4ade80;">已售出</span>';
+					metaStatus = '售出';
+				}
+				let btnHref = `create.html?artworkId=${item.id}`;
+				let btnText = item.status === 'listed' ? '查看' : '修改';
+				if (item.status === 'sold') {
+					btnHref = `view.html?id=${item.id}`;
+					btnText = '查看';
+				}
+				const btn = `<a class="btn" style="padding:8px 12px;" href="${btnHref}">${btnText}</a>`;
+				return `
+				<div class="card">
+					<div class="meta"><span>#${item.id}</span><span>${metaStatus}</span></div>
+					<div class="title">${item.title}</div>
+					<div class="stat-line">${chip}${btn}</div>
+				</div>`;
+			};
+
+			const blocks = [
+				{ title: '草稿', list: drafts },
+				{ title: '已上架', list: listed },
+				{ title: '已售出', list: sold }
+			];
+
+			blocks.forEach(({ title, list }) => {
+				const wrap = document.createElement('div');
+				wrap.className = 'card';
+				const inner = list.length ? list.map(buildCard).join('') : '<div class="label" style="color: var(--muted);">暂无</div>';
+				wrap.innerHTML = `<div class="meta"><span>${title}</span><span>${list.length} 个</span></div>${inner}`;
+				artworksGrid.appendChild(wrap);
+			});
+		};
+
+		const loadArtworks = async () => {
+			const token = localStorage.getItem('token');
+			if (!token) {
+				artworksMeta.textContent = '未登录：登录后可查看你的画作';
+				artworksGrid.innerHTML = '';
+				return;
+			}
+			artworksMeta.textContent = '加载中...';
+			try {
+				const res = await fetch(`${API_BASE}/artworks`, { headers: { Authorization: `Bearer ${token}` } });
+				if (!res.ok) throw new Error('failed');
+				const data = await res.json();
+				artworks = Array.isArray(data.items) ? data.items : [];
+				const draftCount = artworks.filter(a=>a.status==='draft').length;
+				const listedCount = artworks.filter(a=>a.status==='listed').length;
+				const soldCount = artworks.filter(a=>a.status==='sold').length;
+				artworksMeta.textContent = `共 ${artworks.length} 个画作（草稿 ${draftCount} · 上架 ${listedCount} · 售出 ${soldCount})`;
+				renderArtworks();
+			} catch (err) {
+				artworksMeta.textContent = '加载画作失败';
+				artworksGrid.innerHTML = '<div class="label" style="color: var(--muted);">暂时无法获取画作</div>';
+			}
+		};
+
+		document.addEventListener('DOMContentLoaded', async () => {
+			await loadPalette();
+			renderStats();
+			renderInventory();
+			renderActivity();
+			loadArtworks();
+		});
+
+		// Reload when returning via browser back/forward cache
+		window.addEventListener('pageshow', (e) => {
+			const navEntry = performance.getEntriesByType('navigation')[0];
+			if (e.persisted || navEntry?.type === 'back_forward') {
+				location.reload();
+			}
+		});
+	</script>
+</body>
+
+</html>

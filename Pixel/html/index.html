@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		.page {
+			grid-template-columns: 3fr 1.1fr;
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		header {
+			grid-column: 1 / -1;
+		}
+
+		header::after {
+			content: "PIXEL";
+			position: absolute;
+			right: -60px;
+			top: -30px;
+			font-size: 72px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(12deg);
+			pointer-events: none;
+		}
+
+		main {
+			display: grid;
+			gap: 18px;
+			align-content: start;
+		}
+
+		.profile-link {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.card.card-link {
+			color: inherit;
+			text-decoration: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="title-block">
+				<h1><span>PIX</span> 像素画市场</h1>
+				<p>发现、收藏、上架你的下一幅像素灵感。</p>
+			</div>
+			<div class="header-actions">
+				<button class="btn" id="open-login">登录</button>
+				<a class="btn" href="market.html">浏览市场</a>
+				<a class="btn auth-only" href="create.html">创作画作</a>
+				<a class="btn auth-only" id="profile-link" href="profile.html">个人信息</a>
+				<a class="btn auth-only" id="inventory-link" href="inventory.html">个人仓库</a>
+			</div>
+		</header>
+
+		<main>
+			<section class="section">
+				<h2>今日精选</h2>
+				<div class="grid cols-3">
+					<a class="card card-link" href="view.html">
+						<div class="meta"><span>By @neonfox</span><span>地球灵感</span></div>
+						<div class="title">赛博街景</div>
+						<div class="chip">上架价 0.8 ETH</div>
+						<div class="pixel-preview">
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						</div>
+					</a>
+					<a class="card card-link" href="view.html">
+						<div class="meta"><span>By @dotwave</span><span>月球灵感</span></div>
+						<div class="title">月港旅人</div>
+						<div class="chip">限量 24 份</div>
+						<div class="pixel-preview">
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						</div>
+					</a>
+					<a class="card card-link" href="view.html">
+						<div class="meta"><span>By @retrocat</span><span>深海灵感</span></div>
+						<div class="title">珊瑚之光</div>
+						<div class="chip">成交价 1.2 ETH</div>
+						<div class="pixel-preview">
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+							<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						</div>
+					</a>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>热门作者</h2>
+				<div class="grid cols-2">
+					<div class="card">
+						<div class="meta"><span>创作者</span><span>粉丝 12.4k</span></div>
+						<div class="title">@gridnova · 主打科幻霓虹风</div>
+						<div class="progress"><span></span></div>
+					</div>
+					<div class="card">
+						<div class="meta"><span>创作者</span><span>粉丝 9.1k</span></div>
+						<div class="title">@chillbyte · 暖色像素日常</div>
+						<div class="progress"><span style="width:74%;"></span></div>
+					</div>
+					<div class="card">
+						<div class="meta"><span>创作者</span><span>粉丝 7.6k</span></div>
+						<div class="title">@shadow8 · 极简黑白线条</div>
+						<div class="progress"><span style="width:52%;"></span></div>
+					</div>
+					<div class="card">
+						<div class="meta"><span>创作者</span><span>粉丝 6.3k</span></div>
+						<div class="title">@mintcube · 复古游戏机合集</div>
+						<div class="progress"><span style="width:46%;"></span></div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>交易动态</h2>
+				<div class="grid">
+					<div class="card">
+						<div class="meta"><span>2 分钟前</span><span>交易号 #9284</span></div>
+						<div class="title">@loopie 以 0.42 ETH 购入「光栅行者」</div>
+					</div>
+					<div class="card">
+						<div class="meta"><span>12 分钟前</span><span>交易号 #9279</span></div>
+						<div class="title">@monopixel 以 3,200 RMB 拍下「雨夜之城」</div>
+					</div>
+					<div class="card">
+						<div class="meta"><span>30 分钟前</span><span>交易号 #9266</span></div>
+						<div class="title">@dawnbyte 上架「晨光邮票」限量 16 份</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<aside>
+			<div class="sidebar-card auth-only" id="sidebar-profile">
+				<div class="profile">
+					<a class="avatar profile-link" href="profile.html">PX</a>
+					<a class="info profile-link" href="profile.html">
+						<strong id="profile-handle">像素行者</strong>
+						<span id="profile-balance">像素币 --</span>
+					</a>
+				</div>
+			</div>
+
+			<div class="sidebar-card auth-only" id="sidebar-artworks">
+				<div class="profile" style="justify-content: space-between;">
+					<div>
+						<strong><a class="profile-link" href="inventory.html">我的画作</a></strong>
+						<span style="color: var(--muted);">最近 3 件</span>
+					</div>
+					<div class="badge">同步</div>
+				</div>
+				<div class="list" id="artworks-list"></div>
+			</div>
+
+			<div class="sidebar-card auth-only" id="sidebar-checkin">
+				<div class="profile" style="justify-content: space-between;">
+					<div>
+						<strong>每日签到</strong>
+						<span style="color: var(--muted);" id="checkin-streak">获取像素币</span>
+					</div>
+					<button class="btn" id="checkin-btn" style="padding: 8px 12px;">签到</button>
+				</div>
+				<div class="progress"><span id="checkin-progress" style="width: 0%;"></span></div>
+				<p id="checkin-msg" style="margin: 10px 0 0; color: var(--muted); font-size: 13px;">每日登录领取 9 普通 + 1 稀有像素块。</p>
+			</div>
+
+			<div class="sidebar-card">
+				<div class="profile" style="justify-content: space-between;">
+					<div>
+						<strong>浏览市场</strong>
+						<span style="color: var(--muted);">按主题跳转</span>
+					</div>
+				</div>
+				<div class="list">
+					<a class="list-item" href="market.html#cyber"><span>赛博 & 霓虹</span><span class="badge">128</span></a>
+					<a class="list-item" href="market.html#daily"><span>像素日常</span><span class="badge">96</span></a>
+					<a class="list-item" href="market.html#retro"><span>复古游戏</span><span class="badge">74</span></a>
+					<a class="list-item" href="market.html#nature"><span>自然风景</span><span class="badge">63</span></a>
+				</div>
+			</div>
+		</aside>
+
+		<footer>
+			<div>© 2026 PIX Market · 打造高像素的灵感宇宙。</div>
+		</footer>
+	</div>
+
+	<div class="modal-backdrop" id="login-modal">
+		<div class="modal">
+			<h3 id="auth-title">登录</h3>
+			<p id="auth-desc">使用演示账号快速体验：demo@example.com / password。</p>
+			<form id="login-form">
+				<div class="form-group">
+					<label for="email">邮箱</label>
+					<input class="form-control" id="email" name="email" type="email" value="demo@example.com" required>
+				</div>
+				<div class="form-group register-only" style="display:none;" id="handle-group">
+					<label for="handle">昵称</label>
+					<input class="form-control" id="handle" name="handle" type="text" placeholder="例：pixelwalker" autocomplete="nickname">
+				</div>
+				<div class="form-group">
+					<label for="password">密码</label>
+					<input class="form-control" id="password" name="password" type="password" value="password" required>
+				</div>
+				<div class="form-group register-only" style="display:none;" id="confirm-group">
+					<label for="confirm-password">确认密码</label>
+					<input class="form-control" id="confirm-password" name="confirm-password" type="password" placeholder="再次输入密码">
+				</div>
+				<div class="modal-actions">
+					<div class="text-muted" id="login-status"></div>
+					<div style="display:flex; gap:8px; align-items:center;">
+						<button type="button" class="btn" id="toggle-mode">去注册</button>
+						<button type="button" class="btn" id="close-login">取消</button>
+						<button type="submit" class="btn primary" id="submit-login">登录</button>
+					</div>
+				</div>
+			</form>
+			<div class="alert" id="login-alert" style="display:none;"></div>
+		</div>
+	</div>
+
+	<script>
+		const API_BASE = 'http://localhost:4000';
+		const authOnlyEls = document.querySelectorAll('.auth-only');
+		const loginBtn = document.getElementById('open-login');
+		const profileHandleEl = document.getElementById('profile-handle');
+		const profileBalanceEl = document.getElementById('profile-balance');
+		const artworksListEl = document.getElementById('artworks-list');
+		const checkinBtn = document.getElementById('checkin-btn');
+		const checkinMsg = document.getElementById('checkin-msg');
+		const checkinProgress = document.getElementById('checkin-progress');
+		const checkinStreak = document.getElementById('checkin-streak');
+		const previewPalette = ['#0ea5e9', '#a855f7', '#ef5da8', '#f5d565', '#7ad9c1', '#f97316', '#22c55e'];
+		const buildPreviews = () => {
+			document.querySelectorAll('.pixel-preview').forEach(el => {
+				el.innerHTML = '';
+				for (let i = 0; i < 256; i++) {
+					const cell = document.createElement('span');
+					const roll = Math.random();
+					if (roll > 0.42) {
+						cell.style.background = previewPalette[Math.floor(Math.random() * previewPalette.length)];
+					}
+					el.appendChild(cell);
+				}
+			});
+		};
+			document.addEventListener('DOMContentLoaded', () => {
+				buildPreviews();
+				const modal = document.getElementById('login-modal');
+				const openBtn = document.getElementById('open-login');
+				const closeBtn = document.getElementById('close-login');
+				const form = document.getElementById('login-form');
+				const statusEl = document.getElementById('login-status');
+				const alertEl = document.getElementById('login-alert');
+				const submitBtn = document.getElementById('submit-login');
+				const toggleBtn = document.getElementById('toggle-mode');
+				const handleGroup = document.getElementById('handle-group');
+				const confirmGroup = document.getElementById('confirm-group');
+				const titleEl = document.getElementById('auth-title');
+				const descEl = document.getElementById('auth-desc');
+				let isRegister = false;
+
+				const setAlert = (msg, isError = false) => {
+					alertEl.textContent = msg;
+					alertEl.style.display = msg ? 'block' : 'none';
+					alertEl.classList.toggle('error', isError);
+				};
+
+				const renderProfile = (handle, balance) => {
+					const safeHandle = handle ? `@${handle}` : '像素行者';
+					const balanceText = Number.isFinite(balance) ? `像素币 ${balance}` : '像素币 --';
+					profileHandleEl.textContent = safeHandle;
+					profileBalanceEl.textContent = balanceText;
+				};
+
+				const statusBadgeStyle = (status) => {
+					if (status === 'listed') return 'background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); color: #4ade80;';
+					if (status === 'draft') return 'background: rgba(14,165,233,0.12); border-color: rgba(125,211,252,0.5); color: #7dd3fc;';
+					return 'background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #e5e7eb;';
+				};
+
+				const renderArtworks = (items = []) => {
+					if (!artworksListEl) return;
+					if (!items.length) {
+						artworksListEl.innerHTML = '<div class="list-item"><span>暂无作品</span><span class="badge">草稿</span></div>';
+						return;
+					}
+					artworksListEl.innerHTML = '';
+					items.slice(0, 3).forEach(item => {
+						const row = document.createElement('div');
+						row.className = 'list-item';
+						const titleSpan = document.createElement('span');
+						titleSpan.textContent = `「${item.title || '未命名'}」`;
+						const badge = document.createElement('span');
+						badge.className = 'badge';
+						badge.style.cssText = statusBadgeStyle(item.status);
+						badge.textContent = item.status === 'listed' ? '上架' : item.status === 'draft' ? '草稿' : '售出';
+						row.appendChild(titleSpan);
+						row.appendChild(badge);
+						artworksListEl.appendChild(row);
+					});
+				};
+
+				const renderCheckin = ({ streak = 0, claimed = false } = {}) => {
+					if (checkinStreak) {
+						checkinStreak.textContent = claimed ? `已领取 · 连签 ${streak} 天` : `可领取 · 连签 ${streak} 天`;
+					}
+					if (checkinBtn) {
+						checkinBtn.disabled = claimed;
+						checkinBtn.textContent = claimed ? '已签到' : '签到';
+					}
+					if (checkinProgress) {
+						const pct = Math.min(100, (streak % 7) * (100 / 7));
+						checkinProgress.style.width = `${pct}%`;
+					}
+					if (checkinMsg) {
+						checkinMsg.textContent = claimed ? '今日奖励已领取：9 普通 + 1 稀有像素块' : '每日登录领取 9 普通 + 1 稀有像素块';
+					}
+				};
+
+				const setAuthVisibility = (loggedIn) => {
+					authOnlyEls.forEach(el => el.classList.toggle('hidden', !loggedIn));
+					loginBtn.textContent = loggedIn ? '登出' : '登录';
+				};
+
+				const fetchProfile = async () => {
+					const token = localStorage.getItem('token');
+					if (!token) {
+						renderProfile(null, null);
+						renderArtworks([]);
+						renderCheckin({ streak: 0, claimed: true });
+						return;
+					}
+					try {
+						const res = await fetch(`${API_BASE}/users/me`, {
+							headers: { Authorization: `Bearer ${token}` }
+						});
+						if (!res.ok) {
+							throw new Error('无法获取用户信息');
+						}
+						const data = await res.json();
+						renderProfile(data?.handle || data?.email || null, data?.balance);
+						setAuthVisibility(true);
+					} catch (err) {
+						console.error('profile fetch failed', err);
+						localStorage.removeItem('token');
+						renderProfile(null, null);
+						renderArtworks([]);
+						renderCheckin({ streak: 0, claimed: true });
+						setAuthVisibility(false);
+						setAlert('登录状态已失效，请重新登录', true);
+					}
+				};
+
+				const fetchArtworks = async () => {
+					const token = localStorage.getItem('token');
+					if (!token) {
+						renderArtworks([]);
+						renderCheckin({ streak: 0, claimed: true });
+						return;
+					}
+					try {
+						const res = await fetch(`${API_BASE}/artworks`, {
+							headers: { Authorization: `Bearer ${token}` }
+						});
+						if (!res.ok) throw new Error('无法获取作品');
+						const data = await res.json();
+						renderArtworks(Array.isArray(data?.items) ? data.items : []);
+					} catch (err) {
+						console.error('artworks fetch failed', err);
+						if (err.message === '无法获取作品') {
+							renderArtworks([]);
+							renderCheckin({ streak: 0, claimed: true });
+						}
+					}
+				};
+
+				const fetchCheckin = async () => {
+					const token = localStorage.getItem('token');
+					if (!token) {
+						renderCheckin({ streak: 0, claimed: true });
+						return;
+					}
+					try {
+						const res = await fetch(`${API_BASE}/activity/checkin`, { headers: { Authorization: `Bearer ${token}` } });
+						if (res.status === 404) {
+							renderCheckin({ streak: 0, claimed: false });
+							return;
+						}
+						if (!res.ok) throw new Error('load_checkin_failed');
+						const data = await res.json();
+						renderCheckin({ streak: data?.streak || 0, claimed: data?.claimed === true });
+					} catch (err) {
+						console.error('checkin fetch failed', err);
+						renderCheckin({ streak: 0, claimed: false });
+					}
+				};
+
+				const doCheckin = async () => {
+					const token = localStorage.getItem('token');
+					if (!token) {
+						setAlert('请先登录后再签到', true);
+						return;
+					}
+					checkinBtn.disabled = true;
+					checkinBtn.textContent = '领取中...';
+					try {
+						const res = await fetch(`${API_BASE}/rewards/checkin`, {
+							method: 'POST',
+							headers: { Authorization: `Bearer ${token}` }
+						});
+						if (res.status === 409) {
+							const data = await res.json().catch(() => ({}));
+							renderCheckin({ streak: data?.streak || 0, claimed: true });
+							setAlert('今日已签到领取', false);
+							return;
+						}
+						if (!res.ok) throw new Error('checkin_failed');
+						const data = await res.json();
+						renderCheckin({ streak: data?.streak || 0, claimed: true });
+						setAlert('签到成功，奖励已发放', false);
+						fetchProfile();
+					} catch (err) {
+						console.error('checkin failed', err);
+						setAlert('签到失败，请稍后重试', true);
+					} finally {
+						fetchCheckin();
+					}
+				};
+
+				const updateModeUI = () => {
+					handleGroup.style.display = isRegister ? 'grid' : 'none';
+					confirmGroup.style.display = isRegister ? 'grid' : 'none';
+					submitBtn.textContent = isRegister ? '注册并登录' : '登录';
+					toggleBtn.textContent = isRegister ? '去登录' : '去注册';
+					titleEl.textContent = isRegister ? '注册' : '登录';
+					descEl.textContent = isRegister ? '创建新账号，首次会自动发放一套演示调色板。' : '使用演示账号快速体验：demo@example.com / password。';
+				};
+
+				const isLoggedIn = () => Boolean(localStorage.getItem('token'));
+
+				const openModal = () => {
+					isRegister = false;
+					updateModeUI();
+					modal.classList.add('show');
+					setAlert('');
+					statusEl.textContent = '';
+				};
+
+				const closeModal = () => {
+					modal.classList.remove('show');
+					isRegister = false;
+					updateModeUI();
+					form.reset();
+					setAlert('');
+					statusEl.textContent = '';
+				};
+
+				const handleLoginButton = () => {
+					if (isLoggedIn()) {
+						localStorage.removeItem('token');
+						setAuthVisibility(false);
+						renderProfile(null, null);
+						renderArtworks([]);
+						renderCheckin({ streak: 0, claimed: true });
+						setAlert('');
+						statusEl.textContent = '';
+						return;
+					}
+					openModal();
+				};
+
+				toggleBtn?.addEventListener('click', () => {
+					isRegister = !isRegister;
+					updateModeUI();
+					setAlert('');
+					statusEl.textContent = '';
+				});
+
+				openBtn?.addEventListener('click', handleLoginButton);
+				closeBtn?.addEventListener('click', closeModal);
+				modal?.addEventListener('click', (e) => {
+					// prevent backdrop click from closing modal
+					if (e.target === modal) {
+						e.stopPropagation();
+					}
+				});
+
+				form?.addEventListener('submit', async (e) => {
+					e.preventDefault();
+					setAlert('');
+					statusEl.textContent = isRegister ? '注册中...' : '登录中...';
+					submitBtn.disabled = true;
+					try {
+						const formData = new FormData(form);
+						const payload = {
+							email: formData.get('email'),
+							password: formData.get('password')
+						};
+						if (isRegister) {
+							const confirmPwd = formData.get('confirm-password');
+							if (payload.password !== confirmPwd) {
+								throw new Error('两次输入的密码不一致');
+							}
+						}
+						let url = `${API_BASE}/auth/login`;
+						if (isRegister) {
+							payload.handle = formData.get('handle') || payload.email.split('@')[0];
+							url = `${API_BASE}/auth/register`;
+						}
+						const res = await fetch(url, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify(payload)
+						});
+						if (!res.ok) {
+							const errData = await res.json().catch(() => ({}));
+							const msg = errData?.message || (isRegister ? '注册失败，请检查输入' : '登录失败，请检查账号密码');
+							throw new Error(msg);
+						}
+						const data = await res.json();
+						if (data?.token) {
+							localStorage.setItem('token', data.token);
+							setAlert(isRegister ? '注册成功，已自动登录' : '登录成功，已保存凭证');
+							statusEl.textContent = '';
+							setAuthVisibility(true);
+							fetchProfile();
+							fetchArtworks();
+							fetchCheckin();
+							setTimeout(closeModal, 600);
+						} else {
+							throw new Error('未收到 token');
+						}
+					} catch (err) {
+						setAlert(err.message || (isRegister ? '注册失败' : '登录失败'), true);
+						statusEl.textContent = '';
+					} finally {
+						submitBtn.disabled = false;
+					}
+				});
+				const initAuth = () => {
+					setAuthVisibility(isLoggedIn());
+					if (isLoggedIn()) {
+						fetchProfile();
+						fetchArtworks();
+						fetchCheckin();
+					} else {
+						renderProfile(null, null);
+						renderArtworks([]);
+						renderCheckin({ streak: 0, claimed: true });
+					}
+					updateModeUI();
+				};
+
+				initAuth();
+
+				checkinBtn?.addEventListener('click', (e) => {
+					e.preventDefault();
+					doCheckin();
+				});
+			});
+
+			// Reload when returning via browser back/forward cache
+			window.addEventListener('pageshow', (e) => {
+				const navEntry = performance.getEntriesByType('navigation')[0];
+				if (e.persisted || navEntry?.type === 'back_forward') {
+					location.reload();
+				}
+			});
+	</script>
+</body>
+
+</html>

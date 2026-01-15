@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>浏览市场 · 像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			background: radial-gradient(circle at 18% 20%, rgba(124, 58, 237, 0.18), transparent 38%),
+				radial-gradient(circle at 78% 6%, rgba(14, 165, 233, 0.18), transparent 30%),
+				var(--bg);
+		}
+
+		.page {
+			padding: 40px 22px 64px;
+			gap: 18px;
+		}
+
+		header {
+			justify-content: space-between;
+			padding: 22px 26px;
+		}
+
+		header::after {
+			content: "MARKET";
+			position: absolute;
+			right: -50px;
+			top: -26px;
+			font-size: 64px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(10deg);
+			pointer-events: none;
+		}
+
+		.hero {
+			display: grid;
+			gap: 10px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: var(--font);
+			font-size: 21px;
+			letter-spacing: 1px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.hero h1 span {
+			display: inline-block;
+			padding: 6px 9px;
+			background: rgba(124, 58, 237, 0.14);
+			border: 1px solid rgba(168, 85, 247, 0.35);
+			border-radius: 6px;
+			color: var(--accent);
+		}
+
+		.hero p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.actions {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+		}
+
+		.btn.ghost {
+			border-style: dashed;
+			color: var(--muted);
+		}
+
+		.filters {
+			display: grid;
+			gap: 12px;
+			grid-template-columns: 2fr 1fr;
+			background: var(--card);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			border-radius: var(--radius);
+			padding: 14px 16px;
+			box-shadow: var(--shadow);
+		}
+
+		.filter-input {
+			display: flex;
+			gap: 10px;
+		}
+
+		.input {
+			flex: 1;
+			padding: 12px 14px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			background: rgba(255, 255, 255, 0.04);
+			color: var(--text);
+			outline: none;
+		}
+
+		.chips {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.card {
+			background: var(--card-2);
+			display: grid;
+			gap: 10px;
+		}
+
+		.card.card-link {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.card .title {
+			font-weight: 700;
+			font-size: 15px;
+		}
+
+		.tagline {
+			color: var(--muted);
+			font-size: 13px;
+			margin: -4px 0 2px;
+		}
+
+		.stat-line {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 13px;
+			color: var(--text);
+		}
+
+		.pill {
+			padding: 5px 8px;
+			border-radius: 8px;
+			border: 1px solid rgba(124, 58, 237, 0.35);
+			background: rgba(124, 58, 237, 0.12);
+			color: var(--accent);
+			font-size: 12px;
+			letter-spacing: 0.4px;
+		}
+
+		.pixel-preview {
+			grid-template-columns: repeat(16, 1fr);
+			grid-auto-rows: 1fr;
+			gap: 1px;
+			width: 100%;
+			max-width: 320px;
+			aspect-ratio: 1 / 1;
+			height: auto;
+		}
+
+		.pixel-preview span {
+			display: block;
+			aspect-ratio: 1 / 1;
+			background: #0f172a;
+			border-radius: 2px;
+			border: 1px solid rgba(255, 255, 255, 0.04);
+			overflow: hidden;
+		}
+
+		.breadcrumbs {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.breadcrumbs a {
+			color: var(--accent);
+		}
+
+		footer {
+			margin-top: 12px;
+			padding: 16px 4px;
+		}
+
+		@media (max-width: 900px) {
+			header {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 14px;
+			}
+
+			.filters {
+				grid-template-columns: 1fr;
+			}
+
+			.actions {
+				width: 100%;
+			}
+
+			.actions .btn {
+				flex: 1 1 auto;
+				justify-content: center;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="hero">
+				<div class="breadcrumbs"><a href="index.html">返回首页</a> · <span>浏览市场</span></div>
+				<h1><span>PIX</span> 市场浏览</h1>
+				<p>筛选主题、查看上架、发现最新成交与趋势。</p>
+				<div class="actions">
+					<a class="btn primary" href="#cyber">直达热门分区</a>
+					<a class="btn" href="index.html">回到精选</a>
+					<a class="btn" href="inventory.html">个人仓库</a>
+					<a class="btn" href="profile.html">我的资料</a>
+					<button class="btn ghost" type="button">收藏此筛选</button>
+				</div>
+			</div>
+		</header>
+
+		<div class="filters">
+			<div class="filter-input">
+				<input class="input" type="text" placeholder="搜索画作、作者或标签…">
+				<button class="btn">过滤</button>
+			</div>
+			<div class="chips">
+				<a class="chip" href="#cyber">赛博</a>
+				<a class="chip" href="#daily">日常</a>
+				<a class="chip" href="#retro">复古</a>
+				<a class="chip" href="#nature">自然</a>
+				<a class="chip" href="#new">最新上架</a>
+			</div>
+		</div>
+
+		<section class="section" id="listed">
+			<h2>上架列表</h2>
+			<div id="market-meta" class="label" style="margin-bottom:8px; color: var(--muted);">加载中...</div>
+			<div class="grid" id="market-grid"></div>
+		</section>
+
+		<section class="section" id="cyber">
+			<h2>赛博 & 霓虹</h2>
+			<div class="grid">
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@neonfox</span><span>赛博主题</span></div>
+					<div class="title">光栅行者</div>
+					<div class="tagline">霓虹街巷的雨夜反光。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>上架价 420 像素币</span><span class="pill">HOT</span></div>
+				</a>
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@loopie</span><span>赛博节点</span></div>
+					<div class="title">赛博节点</div>
+					<div class="tagline">高楼间的信号闪烁。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>限量 18 份</span><span class="pill">680 像素币</span></div>
+				</a>
+			</div>
+		</section>
+
+		<section class="section" id="daily">
+			<h2>像素日常</h2>
+			<div class="grid">
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@chillbyte</span><span>日常场景</span></div>
+					<div class="title">午后阳台</div>
+					<div class="tagline">轻风和挂满衣物的杆子。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>售价 120 像素币</span><span class="pill">NEW</span></div>
+				</a>
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@sunlite</span><span>街角光影</span></div>
+					<div class="title">街角咖啡</div>
+					<div class="tagline">雨后咖啡店的暖光。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>热度 73%</span><span class="pill">190 像素币</span></div>
+				</a>
+			</div>
+		</section>
+
+		<section class="section" id="retro">
+			<h2>复古游戏</h2>
+			<div class="grid">
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@mintcube</span><span>复古街机</span></div>
+					<div class="title">8bit 机甲</div>
+					<div class="tagline">街机感十足的战斗姿态。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>上架价 550 像素币</span><span class="pill">ARCADE</span></div>
+				</a>
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@retrocat</span><span>漂移赛道</span></div>
+					<div class="title">像素赛车道</div>
+					<div class="tagline">弯道漂移的红白机风格。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>成交价 770 像素币</span><span class="pill">限时</span></div>
+				</a>
+			</div>
+		</section>
+
+		<section class="section" id="nature">
+			<h2>自然风景</h2>
+			<div class="grid">
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@dawnbyte</span><span>自然邮票</span></div>
+					<div class="title">晨光邮票</div>
+					<div class="tagline">淡粉与晨雾的邮票剪影。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>限量 16 份</span><span class="pill">330 像素币</span></div>
+				</a>
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@leaflab</span><span>林间薄雾</span></div>
+					<div class="title">林间晨雾</div>
+					<div class="tagline">绿与蓝的层叠像素雾气。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>起拍价 250 像素币</span><span class="pill">AUCTION</span></div>
+				</a>
+			</div>
+		</section>
+
+		<section class="section" id="new">
+			<h2>最新上架</h2>
+			<div class="grid">
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@newbyte</span><span>最新上架</span></div>
+					<div class="title">水母之舞</div>
+					<div class="tagline">深海荧光的律动。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>上架 3 分钟</span><span class="pill">90 像素币</span></div>
+				</a>
+				<a class="card card-link" href="view.html">
+					<div class="meta"><span>@skyline</span><span>星轨主题</span></div>
+					<div class="title">夜空邮戳</div>
+					<div class="tagline">星轨与邮戳风格的叠加。</div>
+					<div class="pixel-preview">
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+						<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="stat-line"><span>关注 1.1k</span><span class="pill">210 像素币</span></div>
+				</a>
+			</div>
+		</section>
+
+		<footer>
+			<div>© 2026 PIX Market · 浏览市场</div>
+			<div>继续逛逛 → <a class="btn" href="index.html">返回首页</a></div>
+		</footer>
+	</div>
+
+	<script>
+		const API_BASE = 'http://localhost:4000';
+		const previewPalette = ['#0ea5e9', '#a855f7', '#ef5da8', '#f5d565', '#7ad9c1', '#f97316', '#22c55e'];
+		const fallbackPalette = [
+			{ id: 'neon-cyan', rgb: '#0ea5e9' },
+			{ id: 'neon-pink', rgb: '#ef5da8' },
+			{ id: 'neon-purple', rgb: '#a855f7' },
+			{ id: 'soft-yellow', rgb: '#f5d565' },
+			{ id: 'soft-coral', rgb: '#f58b7c' },
+			{ id: 'soft-mint', rgb: '#7ad9c1' },
+			{ id: 'retro-green', rgb: '#3ba56a' },
+			{ id: 'retro-orange', rgb: '#f97316' },
+			{ id: 'retro-blue', rgb: '#3b82f6' },
+			{ id: 'earth-brown', rgb: '#8b5a2b' },
+			{ id: 'leaf', rgb: '#22c55e' },
+			{ id: 'sky', rgb: '#38bdf8' }
+		];
+		const paletteMapGlobal = new Map(fallbackPalette.map(p => [p.id, p.rgb]));
+		const paletteBaseGlobal = new Map(fallbackPalette.map(p => [p.id.replace(/-\d+$/, ''), p.rgb]));
+		const baseId = (id) => (id ? id.replace(/-\d+$/, '') : '');
+		const marketGrid = document.getElementById('market-grid');
+		const marketMeta = document.getElementById('market-meta');
+
+		const buildPreviews = () => {
+			document.querySelectorAll('.pixel-preview').forEach(el => {
+				el.innerHTML = '';
+				for (let i = 0; i < 256; i++) {
+					const cell = document.createElement('span');
+					const roll = Math.random();
+					if (roll > 0.42) {
+						cell.style.background = previewPalette[Math.floor(Math.random() * previewPalette.length)];
+					}
+					el.appendChild(cell);
+				}
+			});
+		};
+
+		const fillPreviewFromGrid = (el, grid = [], paletteMap, paletteBase) => {
+			el.innerHTML = '';
+			for (let i = 0; i < 256; i++) {
+				const cell = document.createElement('span');
+				const colorId = grid[i];
+				if (colorId) {
+					const rgb = paletteMap.get(colorId) || paletteBase.get(baseId(colorId));
+					if (rgb) cell.style.background = rgb;
+				}
+				el.appendChild(cell);
+			}
+		};
+
+		const purchase = async (id, btn) => {
+			const token = localStorage.getItem('token');
+			if (!token) {
+				alert('请先登录后购买');
+				return;
+			}
+			btn.disabled = true;
+			btn.textContent = '购买中...';
+			try {
+				const res = await fetch(`${API_BASE}/artworks/${id}/purchase`, {
+					method: 'POST',
+					headers: { Authorization: `Bearer ${token}` }
+				});
+				if (!res.ok) {
+					const err = await res.json().catch(() => ({}));
+					alert(err.message || '购买失败');
+					return;
+				}
+				alert('购买成功');
+				loadListed();
+			} finally {
+				btn.disabled = false;
+				btn.textContent = '购买';
+			}
+		};
+
+		const renderListed = (items) => {
+			marketGrid.innerHTML = '';
+			if (!items.length) {
+				marketGrid.innerHTML = '<div class="label" style="color: var(--muted);">暂无上架作品</div>';
+				return;
+			}
+			items.forEach(item => {
+				const paletteMap = new Map(paletteMapGlobal);
+				const paletteBase = new Map(paletteBaseGlobal);
+				if (Array.isArray(item.data?.usage)) {
+					item.data.usage.forEach(u => {
+						if (!u || !u.id || !u.rgb) return;
+						paletteMap.set(u.id, u.rgb);
+						paletteBase.set(baseId(u.id), u.rgb);
+					});
+				}
+				const card = document.createElement('a');
+				card.className = 'card card-link';
+				card.href = `view.html?id=${item.id}`;
+				card.innerHTML = `
+					<div class="meta"><span>@${item.seller_handle || 'unknown'}</span><span>上架</span></div>
+					<div class="title">${item.title}</div>
+					<div class="pixel-preview"></div>
+					<div class="stat-line"><span>${item.price ?? 0} 像素币</span><button class="btn primary" type="button">购买</button></div>
+				`;
+				const previewEl = card.querySelector('.pixel-preview');
+				const grid = Array.isArray(item.data?.grid) ? item.data.grid : [];
+				fillPreviewFromGrid(previewEl, grid, paletteMap, paletteBase);
+				const btn = card.querySelector('button');
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					purchase(item.id, btn);
+				});
+				marketGrid.appendChild(card);
+			});
+		};
+
+		const loadListed = async () => {
+			marketMeta.textContent = '加载中...';
+			try {
+				const res = await fetch(`${API_BASE}/artworks/feed/listed`);
+				if (!res.ok) throw new Error('failed');
+				const data = await res.json();
+				const items = Array.isArray(data.items) ? data.items : [];
+				marketMeta.textContent = `共 ${items.length} 件上架作品`;
+				renderListed(items);
+			} catch (err) {
+				marketMeta.textContent = '加载失败';
+				marketGrid.innerHTML = '<div class="label" style="color: var(--muted);">暂时无法获取市场数据</div>';
+			}
+		};
+
+		document.addEventListener('DOMContentLoaded', () => {
+			buildPreviews();
+			loadListed();
+		});
+	</script>
+
+	<script>
+		// Reload when returning via browser back/forward cache
+		window.addEventListener('pageshow', (e) => {
+			const navEntry = performance.getEntriesByType('navigation')[0];
+			if (e.persisted || navEntry?.type === 'back_forward') {
+				location.reload();
+			}
+		});
+	</script>
+</body>
+
+</html>

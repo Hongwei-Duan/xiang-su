@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>创作画作 · 像素画市场</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			background: radial-gradient(circle at 16% 18%, rgba(124, 58, 237, 0.18), transparent 36%),
+				radial-gradient(circle at 80% 4%, rgba(14, 165, 233, 0.18), transparent 30%),
+				var(--bg);
+		}
+
+		.page {
+			padding: 40px 22px 64px;
+			gap: 18px;
+		}
+
+		header {
+			gap: 16px;
+			padding: 22px 26px;
+		}
+
+		header::after {
+			content: "CREATE";
+			position: absolute;
+			right: -52px;
+			top: -26px;
+			font-size: 64px;
+			letter-spacing: 8px;
+			color: rgba(255, 255, 255, 0.04);
+			transform: rotate(10deg);
+			pointer-events: none;
+		}
+
+		.hero {
+			display: grid;
+			gap: 10px;
+			min-width: 280px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: var(--font);
+			font-size: 21px;
+			letter-spacing: 1px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.hero h1 span {
+			display: inline-block;
+			padding: 6px 9px;
+			background: rgba(124, 58, 237, 0.14);
+			border: 1px solid rgba(168, 85, 247, 0.35);
+			border-radius: 6px;
+			color: var(--accent);
+		}
+
+		.hero p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.breadcrumbs {
+			color: var(--muted);
+			font-size: 13px;
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.breadcrumbs a {
+			color: var(--accent);
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			padding: 11px 15px;
+		}
+
+		.btn.ghost {
+			border-style: dashed;
+			color: var(--muted);
+		}
+
+		.workspace {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 18px;
+			align-items: start;
+		}
+
+		.section {
+			padding: 16px;
+		}
+
+		.section h2 {
+			margin: 0 0 12px;
+		}
+
+		.grid-canvas {
+			display: grid;
+			grid-template-columns: repeat(16, minmax(0, 1fr));
+			gap: 3px;
+			background: rgba(255, 255, 255, 0.02);
+			padding: 12px;
+			border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+		}
+
+		.pixel-cell {
+			width: 100%;
+			padding-top: 100%;
+			background: #111827;
+			border-radius: 6px;
+			position: relative;
+			cursor: crosshair;
+			transition: transform var(--transition), border-color var(--transition);
+			border: 1px solid rgba(255, 255, 255, 0.03);
+		}
+
+		.pixel-cell:hover {
+			transform: translateY(-2px);
+			border-color: rgba(124, 58, 237, 0.4);
+		}
+
+		.pixel-cell[data-filled="true"] {
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		}
+
+		.toolbar {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			align-items: center;
+			margin: 10px 0 14px;
+		}
+
+		.name-row {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-bottom: 10px;
+			align-items: center;
+		}
+
+		.input {
+			padding: 11px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			background: rgba(255, 255, 255, 0.04);
+			color: var(--text);
+			outline: none;
+			min-width: 200px;
+		}
+
+		.label {
+			font-size: 13px;
+			color: var(--muted);
+		}
+
+		.indicator {
+			padding: 8px 10px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+			display: inline-flex;
+			gap: 8px;
+			align-items: center;
+			font-size: 13px;
+		}
+
+		.color-chip {
+			width: 18px;
+			height: 18px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		}
+
+		.inventory {
+			display: grid;
+			gap: 12px;
+		}
+
+		.tone-block {
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			border-radius: 12px;
+			background: var(--card-2);
+			padding: 12px;
+			display: grid;
+			gap: 10px;
+		}
+
+		.tone-title {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.palette-grid {
+			display: grid;
+			gap: 8px;
+			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+		}
+
+		.palette-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: rgba(255, 255, 255, 0.02);
+			cursor: pointer;
+			transition: transform var(--transition), border-color var(--transition), background var(--transition);
+			text-decoration: none;
+			color: var(--text);
+		}
+
+		.palette-item:hover {
+			transform: translateY(-2px);
+			border-color: rgba(124, 58, 237, 0.5);
+		}
+
+		.palette-item.active {
+			border-color: rgba(124, 58, 237, 0.9);
+			box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
+		}
+
+		.palette-item.disabled {
+			opacity: 0.35;
+			cursor: not-allowed;
+		}
+
+		.count {
+			font-weight: 700;
+			font-size: 13px;
+		}
+
+		.rarity {
+			padding: 4px 8px;
+			border-radius: 8px;
+			font-size: 12px;
+			letter-spacing: 0.3px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.legend {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			color: var(--muted);
+			font-size: 12px;
+		}
+
+		.tooltip {
+			position: fixed;
+			background: rgba(19, 28, 49, 0.96);
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: var(--shadow);
+			font-size: 12px;
+			color: var(--text);
+			pointer-events: none;
+			opacity: 0;
+			transform: translateY(4px);
+			transition: opacity 120ms ease, transform 120ms ease;
+			z-index: 10;
+			min-width: 180px;
+		}
+
+		.tooltip.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		.toast {
+			position: fixed;
+			bottom: 26px;
+			right: 26px;
+			background: rgba(14, 165, 233, 0.1);
+			border: 1px solid rgba(14, 165, 233, 0.4);
+			color: var(--text);
+			padding: 12px 14px;
+			border-radius: 12px;
+			box-shadow: var(--shadow);
+			opacity: 0;
+			transform: translateY(10px);
+			transition: opacity 150ms ease, transform 150ms ease;
+			z-index: 11;
+		}
+
+		.toast.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		footer {
+			margin-top: 8px;
+			padding: 12px 4px;
+		}
+
+		@media (max-width: 1024px) {
+			.workspace {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page">
+		<header>
+			<div class="hero">
+				<div class="breadcrumbs"><a href="index.html">返回首页</a> · <span>创作画作</span></div>
+				<h1><span>PIX</span> 创作工坊</h1>
+				<p>16x16 像素画布，使用仓库像素块，拖拽上色，支持撤回/重做与保存。</p>
+			</div>
+			<div class="actions">
+				<button class="btn" id="undoBtn">撤回</button>
+				<button class="btn" id="redoBtn">重做</button>
+				<button class="btn primary" id="saveBtn">保存草稿</button>
+				<button class="btn primary" id="listBtn" type="button">上架</button>
+				<button class="btn ghost" id="unlistBtn" type="button">撤销上架</button>
+			</div>
+			<div class="indicator" id="auth-state">状态检测中...</div>
+			<div class="indicator" id="status-badge">草稿 · 未上架</div>
+		</header>
+		<div class="workspace">
+			<section class="section">
+				<div class="name-row">
+					<label class="label" for="artName">画作名字</label>
+					<input class="input" id="artName" value="未命名画作" />
+					<button class="btn" id="renameBtn" type="button">重命名</button>
+					<div class="indicator" id="currentName">当前：未命名画作</div>
+				</div>
+				<div class="toolbar">
+					<div class="indicator" id="selectedInfo">
+						<div class="color-chip" id="selectedChip" style="background: #0ea5e9;"></div>
+						<span>当前像素：霓虹青 (稀有) · #0ea5e9</span>
+					</div>
+					<div class="indicator">
+						<span class="label">操作</span>
+						<button class="btn" id="eraserBtn" type="button">橡皮</button>
+					</div>
+				</div>
+				<div class="grid-canvas" id="canvas" aria-label="16x16 像素画布"></div>
+			</section>
+
+			<section class="section">
+				<h2>可用像素块</h2>
+				<div class="legend">
+					<span class="rarity"
+						style="border-color: rgba(148,163,184,0.4); background: rgba(148,163,184,0.12); color: #cbd5e1;">普通</span>
+					<span class="rarity"
+						style="border-color: rgba(14,165,233,0.4); background: rgba(14,165,233,0.12); color: #7dd3fc;">稀有</span>
+					<span class="rarity"
+						style="border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.12); color: #c084fc;">罕见</span>
+				</div>
+				<div class="inventory" id="inventory"></div>
+			</section>
+		</div>
+
+		<footer>
+			<div>像素块为有限资产，涂色会消耗数量，擦除会返还数量。</div>
+			<div>快捷：拖动上色 · 悬停查看提示 · 撤回/重做 · 保存草稿</div>
+		</footer>
+	</div>
+
+	<div class="tooltip" id="tooltip"></div>
+	<div class="toast" id="toast">已保存</div>
+
+	<script>
+		const GRID_SIZE = 16;
+		const tooltip = document.getElementById('tooltip');
+		const toast = document.getElementById('toast');
+		const canvasEl = document.getElementById('canvas');
+		const inventoryEl = document.getElementById('inventory');
+		const selectedInfo = document.getElementById('selectedInfo');
+		const selectedChip = document.getElementById('selectedChip');
+		const undoBtn = document.getElementById('undoBtn');
+		const redoBtn = document.getElementById('redoBtn');
+		const saveBtn = document.getElementById('saveBtn');
+		const eraserBtn = document.getElementById('eraserBtn');
+		const artNameInput = document.getElementById('artName');
+		const renameBtn = document.getElementById('renameBtn');
+		const listBtn = document.getElementById('listBtn');
+		const unlistBtn = document.getElementById('unlistBtn');
+		const currentName = document.getElementById('currentName');
+		const authState = document.getElementById('auth-state');
+		const statusBadge = document.getElementById('status-badge');
+
+		const API_BASE = 'http://localhost:4000';
+		let palette = [];
+		let paletteMap = new Map();
+		let paletteBaseMap = new Map();
+		let paletteNameMap = new Map();
+		let usageLookup = new Map();
+		let usageBaseLookup = new Map();
+		let usageNameLookup = new Map();
+		const params = new URLSearchParams(window.location.search);
+		let artworkId = params.get('artworkId');
+		let artworkStatus = 'draft';
+		let artworkPrice = null;
+		let isLoadingArtwork = false;
+		const baseId = (id) => {
+			if (!id || typeof id !== 'string') return '';
+			const clean = id.trim();
+			return clean.replace(/-\d+$/, '');
+		};
+
+		const updateAuthState = (text) => {
+			if (authState) authState.textContent = text;
+		};
+
+		const rarityStyles = {
+			'普通': 'border-color: rgba(148,163,184,0.4); background: rgba(148,163,184,0.12); color: #cbd5e1;',
+			'稀有': 'border-color: rgba(14,165,233,0.4); background: rgba(14,165,233,0.12); color: #7dd3fc;',
+			'罕见': 'border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.12); color: #c084fc;'
+		};
+
+		const fallbackPalette = [
+			{ id: 'neon-cyan', name: '霓虹青', rarity: '稀有', rgb: '#0ea5e9', tone: '霓虹', count: 42 },
+			{ id: 'neon-pink', name: '霓虹粉', rarity: '罕见', rgb: '#ef5da8', tone: '霓虹', count: 24 },
+			{ id: 'neon-purple', name: '霓虹紫', rarity: '罕见', rgb: '#a855f7', tone: '霓虹', count: 18 },
+			{ id: 'soft-yellow', name: '柔黄', rarity: '普通', rgb: '#f5d565', tone: '柔和', count: 36 },
+			{ id: 'soft-coral', name: '珊瑚', rarity: '稀有', rgb: '#f58b7c', tone: '柔和', count: 28 },
+			{ id: 'soft-mint', name: '薄荷', rarity: '普通', rgb: '#7ad9c1', tone: '柔和', count: 30 },
+			{ id: 'retro-green', name: '复古绿', rarity: '普通', rgb: '#3ba56a', tone: '复古', count: 40 },
+			{ id: 'retro-orange', name: '复古橙', rarity: '稀有', rgb: '#f97316', tone: '复古', count: 22 },
+			{ id: 'retro-blue', name: '复古蓝', rarity: '普通', rgb: '#3b82f6', tone: '复古', count: 34 },
+			{ id: 'earth-brown', name: '泥棕', rarity: '普通', rgb: '#8b5a2b', tone: '自然', count: 26 },
+			{ id: 'leaf', name: '叶绿', rarity: '普通', rgb: '#22c55e', tone: '自然', count: 32 },
+			{ id: 'sky', name: '天空', rarity: '稀有', rgb: '#38bdf8', tone: '自然', count: 27 }
+		];
+
+		const buildPaletteMaps = () => {
+			paletteMap = new Map();
+			paletteBaseMap = new Map();
+			paletteNameMap = new Map();
+			palette.forEach(p => {
+				if (!p || !p.id) return;
+				const pid = p.id.trim();
+				paletteMap.set(pid, p);
+				const bid = baseId(pid);
+				if (bid) paletteBaseMap.set(bid, p);
+				if (p.name) paletteNameMap.set(p.name.trim(), p);
+			});
+			selectedColorId = palette[0]?.id || null;
+			console.log('[palette] loaded', palette.length, 'items; ids:', palette.map(p => p.id));
+			console.log('[palette] base ids', Array.from(paletteBaseMap.keys()));
+			console.log('[palette] names', Array.from(paletteNameMap.keys()));
+		};
+
+		const ensurePaletteEntry = (entry) => {
+			if (!entry || !entry.id) return;
+			const pid = entry.id.trim();
+			if (paletteMap.has(pid)) return;
+			const count = typeof entry.count === 'number' ? entry.count : 0;
+			const newcomer = {
+				id: pid,
+				name: entry.name || entry.id,
+				tone: entry.tone || '',
+				rarity: entry.rarity || '普通',
+				rgb: entry.rgb || '#000000',
+				count,
+				fromServer: false
+			};
+			palette.push(newcomer);
+			paletteMap.set(pid, newcomer);
+			const bid = baseId(pid);
+			if (bid) paletteBaseMap.set(bid, newcomer);
+			if (newcomer.name) paletteNameMap.set(newcomer.name.trim(), newcomer);
+		};
+
+		const loadPalette = async () => {
+			try {
+				const token = localStorage.getItem('token');
+				updateAuthState(token ? '已登录：加载账户调色板...' : '未登录：使用演示调色板');
+				const qs = artworkId ? `?excludeArtworkId=${encodeURIComponent(artworkId)}` : '';
+				const res = await fetch(`${API_BASE}/palettes${qs}`, {
+					headers: token ? { Authorization: `Bearer ${token}` } : {}
+				});
+				if (!res.ok) throw new Error('palette fetch failed');
+				const data = await res.json();
+				palette = Array.isArray(data.items) ? data.items.map(item => ({ ...item, fromServer: true })) : [];
+				updateAuthState(token ? '已登录：已加载账户调色板' : '未登录：已加载演示调色板');
+			} catch (err) {
+				console.warn('Using fallback palette, reason:', err.message);
+				palette = [...fallbackPalette].map(item => ({ ...item, fromServer: false }));
+				updateAuthState('未登录或加载失败：使用演示调色板');
+			}
+			buildPaletteMaps();
+		};
+
+		let grid = new Array(GRID_SIZE * GRID_SIZE).fill(null);
+		let selectedColorId = null;
+		let drawing = false;
+		let drawColorId = null;
+		let hoverTimer = null;
+		let history = [];
+		let redoStack = [];
+		const isLocked = () => artworkStatus === 'listed';
+
+		const snapshot = () => ({
+			grid: [...grid],
+			counts: Object.fromEntries(palette.map(p => [p.id, p.count]))
+		});
+
+		const exportData = () => {
+			const usageMap = new Map();
+			grid.forEach(colorId => {
+				if (!colorId) return;
+				const meta = paletteMap.get(colorId);
+				if (!meta) return;
+				const key = meta.name || colorId;
+				const next = usageMap.get(key) || {
+					id: meta.id,
+					baseId: baseId(meta.id),
+					name: meta.name,
+					tone: meta.tone,
+					rarity: meta.rarity,
+					rgb: meta.rgb,
+					count: 0
+				};
+				next.count += 1;
+				usageMap.set(key, next);
+			});
+			return {
+				grid: [...grid],
+				counts: Object.fromEntries(palette.map(p => [p.id, p.count])),
+				usage: Array.from(usageMap.values())
+			};
+		};
+
+		const applySnapshot = (snap) => {
+			grid = [...snap.grid];
+			palette.forEach(p => { p.count = snap.counts[p.id] ?? 0; });
+			renderGrid();
+			renderInventory();
+			updateSelectedInfo();
+			updateUndoRedoState();
+		};
+
+		const hydrateFromData = (data) => {
+			usageLookup = new Map();
+			usageBaseLookup = new Map();
+			usageNameLookup = new Map();
+			if (data && Array.isArray(data.usage)) {
+				data.usage.forEach(entry => {
+					if (!entry || !entry.id) return;
+					const eid = entry.id.trim();
+					usageLookup.set(eid, entry);
+					const bid = baseId(eid);
+					if (bid) usageBaseLookup.set(bid, entry);
+					if (entry.name) usageNameLookup.set(entry.name.trim(), entry);
+					// Ensure palette has the entry so grid rendering works even if API filtered
+					ensurePaletteEntry(entry);
+				});
+				console.log('[hydrate] usage entries', data.usage.length, 'ids:', data.usage.map(u => u.id));
+			}
+			if (data && Array.isArray(data.grid) && data.grid.length === GRID_SIZE * GRID_SIZE) {
+				grid = [...data.grid];
+				console.log('[hydrate] grid loaded cells filled:', grid.filter(Boolean).length);
+				const sampleIds = grid.filter(Boolean).slice(0, 20);
+				console.log('[hydrate] sample grid ids:', sampleIds);
+			}
+			if (data && data.counts) {
+				palette.forEach(p => {
+					if (p.fromServer) return; // keep server-available counts
+					if (typeof data.counts[p.id] === 'number') p.count = data.counts[p.id];
+				});
+			}
+			// Subtract current artwork usage from available counts so canvas cells represent spent pixels
+			if (data && Array.isArray(data.usage)) {
+				data.usage.forEach(entry => {
+					if (!entry || !entry.id) return;
+					const eid = entry.id.trim();
+					const color = paletteMap.get(eid);
+					const used = Number(entry.count) || 0;
+					if (color && used > 0) {
+						color.count = Math.max(0, (color.count ?? 0) - used);
+					}
+				});
+			}
+			renderGrid();
+			renderInventory();
+			updateSelectedInfo();
+			pushHistory();
+			console.log('[hydrate] palette IDs', palette.map(p => p.id));
+			console.log('[hydrate] palette base IDs', Array.from(paletteBaseMap.keys()));
+		};
+
+		const pushHistory = () => {
+			history.push(snapshot());
+			if (history.length > 80) history.shift();
+			redoStack = [];
+			updateUndoRedoState();
+		};
+
+		const updateUndoRedoState = () => {
+			undoBtn.disabled = history.length <= 1;
+			redoBtn.disabled = redoStack.length === 0;
+		};
+
+		const getColorMeta = (colorId) => {
+			if (!colorId) return null;
+			const direct = paletteMap.get(colorId) || usageLookup.get(colorId);
+			if (direct) return direct;
+			const bid = baseId(colorId);
+			if (paletteBaseMap.has(bid)) return paletteBaseMap.get(bid);
+			if (usageBaseLookup.has(bid)) return usageBaseLookup.get(bid);
+			const name = colorId.trim();
+			if (paletteNameMap.has(name)) return paletteNameMap.get(name);
+			if (usageNameLookup.has(name)) return usageNameLookup.get(name);
+			return null;
+		};
+
+		const renderGrid = () => {
+			const cells = canvasEl.querySelectorAll('.pixel-cell');
+			let missingCount = 0;
+			cells.forEach((cell, idx) => {
+				const colorId = grid[idx];
+				if (colorId) {
+					const color = getColorMeta(colorId);
+					if (color && color.rgb) {
+						cell.style.background = color.rgb;
+						cell.dataset.filled = 'true';
+						return;
+					}
+					missingCount += 1;
+				}
+				cell.style.background = '#111827';
+				cell.dataset.filled = 'false';
+			});
+			if (missingCount) {
+				const sample = grid.filter(Boolean).slice(0, 10);
+				console.warn('[renderGrid] missing color meta for', missingCount, 'cells. sample IDs:', sample);
+			}
+			console.log('[renderGrid] done. missing:', missingCount);
+		};
+
+		const renderInventory = () => {
+			const tones = Array.from(new Set(palette.map(p => p.tone)));
+			inventoryEl.innerHTML = '';
+			tones.forEach(tone => {
+				const items = palette.filter(p => p.tone === tone && p.count > 0);
+				if (!items.length) return;
+				const block = document.createElement('div');
+				block.className = 'tone-block';
+				block.innerHTML = `<div class="tone-title"><span>${tone}</span><span class="label">可用 ${items.reduce((s, i) => s + i.count, 0)} 颗</span></div>`;
+				const gridEl = document.createElement('div');
+				gridEl.className = 'palette-grid';
+				items.forEach(item => {
+					const el = document.createElement('button');
+					el.type = 'button';
+					el.className = 'palette-item' + (item.id === selectedColorId ? ' active' : '');
+					el.dataset.id = item.id;
+					el.innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="color-chip" style="background:${item.rgb};"></div>
+              <div>
+                <div style="font-weight:700;">${item.name}</div>
+                <div class="label">RGB ${item.rgb}</div>
+              </div>
+            </div>
+            <div style="display:grid;gap:6px;justify-items:end;">
+              <span class="count">x${item.count}</span>
+              <span class="rarity" style="${rarityStyles[item.rarity] || ''}">${item.rarity}</span>
+            </div>
+          `;
+					el.addEventListener('click', () => selectColor(item.id));
+					gridEl.appendChild(el);
+				});
+				block.appendChild(gridEl);
+				inventoryEl.appendChild(block);
+			});
+		};
+
+		const selectColor = (id) => {
+			selectedColorId = id;
+			updateSelectedInfo();
+			renderInventory();
+		};
+
+		const updateSelectedInfo = () => {
+			if (selectedColorId === 'erase') {
+				selectedInfo.innerHTML = '<span>当前像素：橡皮 · 不消耗</span>';
+				selectedChip.style.background = '#111827';
+				return;
+			}
+			const color = paletteMap.get(selectedColorId);
+			if (!color) {
+				selectedInfo.innerHTML = '<span>当前像素：未选择</span>';
+				selectedChip.style.background = '#111827';
+				return;
+			}
+			selectedChip.style.background = color.rgb;
+			selectedInfo.innerHTML = `<div class="color-chip" style="background:${color.rgb};"></div><span>当前像素：${color.name} (${color.rarity}) · ${color.rgb} · 剩余 ${color.count}</span>`;
+		};
+
+		const updateStatusBadge = () => {
+			if (!statusBadge) return;
+			const pricePart = artworkStatus === 'listed' && Number.isInteger(artworkPrice) ? ` · 上架价 ${artworkPrice} 像素币` : '';
+			statusBadge.textContent = `${artworkStatus === 'listed' ? '已上架' : '草稿'}${pricePart}`;
+			listBtn.disabled = artworkStatus === 'listed';
+			unlistBtn.disabled = artworkStatus !== 'listed';
+		};
+
+		const applyColor = (idx, colorId) => {
+			if (isLocked()) return;
+			const prev = grid[idx];
+			if (prev === colorId) return;
+
+			if (colorId && colorId !== 'erase') {
+				const color = paletteMap.get(colorId);
+				if (!color || color.count <= 0) return;
+			}
+
+			if (prev && prev !== 'erase') {
+				const prevColor = paletteMap.get(prev);
+				if (prevColor) prevColor.count += 1;
+			}
+
+			if (colorId === 'erase') {
+				grid[idx] = null;
+			} else if (colorId) {
+				const nextColor = paletteMap.get(colorId);
+				if (!nextColor) return;
+				nextColor.count -= 1;
+				grid[idx] = colorId;
+			} else {
+				grid[idx] = null;
+			}
+
+			renderGrid();
+			renderInventory();
+			updateSelectedInfo();
+			pushHistory();
+		};
+
+		const handlePointerDown = (e) => {
+			if (isLocked()) {
+				showToast('已上架：先撤销上架后再编辑');
+				return;
+			}
+			if (!(e.target instanceof HTMLElement) || !e.target.classList.contains('pixel-cell')) return;
+			if (e.button !== 0 && e.button !== 2) return;
+			e.preventDefault();
+			drawing = true;
+			drawColorId = e.button === 2 ? 'erase' : (selectedColorId === 'erase' ? 'erase' : selectedColorId);
+			const idx = Number(e.target.dataset.index);
+			applyColor(idx, drawColorId);
+		};
+
+		const handlePointerMove = (e) => {
+			if (!drawing) return;
+			if (!(e.target instanceof HTMLElement) || !e.target.classList.contains('pixel-cell')) return;
+			const idx = Number(e.target.dataset.index);
+			applyColor(idx, drawColorId);
+		};
+
+		const handlePointerUp = () => { drawing = false; drawColorId = null; tooltip.classList.remove('visible'); };
+
+		const showTooltip = (e, idx) => {
+			const colorId = grid[idx];
+			let content = '';
+			if (colorId) {
+				const color = paletteMap.get(colorId) || usageLookup.get(colorId);
+				if (color) {
+					content = `<strong>${color.name || color.id}</strong><br>等级：${color.rarity || '普通'}<br>RGB：${color.rgb || '--'}<br>剩余：${color.count ?? 0}`;
+				} else {
+					content = '<strong>未知像素</strong>';
+				}
+			} else if (selectedColorId !== 'erase') {
+				const color = paletteMap.get(selectedColorId) || usageLookup.get(selectedColorId);
+				if (color) {
+					content = `<strong>空白</strong><br>下笔：${color.name || color.id} (${color.rarity || '普通'})<br>RGB：${color.rgb || '--'}<br>剩余：${color.count ?? 0}`;
+				} else {
+					content = '<strong>空白</strong><br>下笔：未知像素';
+				}
+			} else {
+				content = '<strong>空白</strong><br>下笔：橡皮 (不消耗)';
+			}
+			tooltip.innerHTML = content;
+			const rect = e.target.getBoundingClientRect();
+			tooltip.style.left = `${rect.left + rect.width / 2 + 10}px`;
+			tooltip.style.top = `${rect.top + window.scrollY + 10}px`;
+			tooltip.classList.add('visible');
+		};
+
+		const hideTooltip = () => {
+			tooltip.classList.remove('visible');
+		};
+
+		const wireTooltip = (cell) => {
+			cell.addEventListener('mouseenter', (e) => {
+				const idx = Number(cell.dataset.index);
+				hoverTimer = setTimeout(() => showTooltip(e, idx), 180);
+			});
+			cell.addEventListener('mouseleave', () => {
+				clearTimeout(hoverTimer);
+				hideTooltip();
+			});
+		};
+
+		const buildGrid = () => {
+			canvasEl.innerHTML = '';
+			for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+				const cell = document.createElement('div');
+				cell.className = 'pixel-cell';
+				cell.dataset.index = String(i);
+				canvasEl.appendChild(cell);
+				wireTooltip(cell);
+			}
+			renderGrid();
+		};
+
+		const undo = () => {
+			if (history.length <= 1) return;
+			const current = history.pop();
+			redoStack.push(current);
+			const prev = history[history.length - 1];
+			applySnapshot(prev);
+		};
+
+		const redo = () => {
+			if (!redoStack.length) return;
+			const next = redoStack.pop();
+			history.push(next);
+			applySnapshot(next);
+		};
+
+		const showToast = (msg) => {
+			toast.textContent = msg;
+			toast.classList.add('visible');
+			setTimeout(() => toast.classList.remove('visible'), 1800);
+		};
+
+		const getToken = () => localStorage.getItem('token');
+
+		const saveDraft = async () => {
+			if (isLocked()) {
+				showToast('已上架：先撤销上架再保存');
+				return;
+			}
+			const token = getToken();
+			if (!token) {
+				showToast('请先登录再保存');
+				return;
+			}
+			const name = artNameInput.value.trim() || '未命名画作';
+			const payload = { title: name, data: exportData() };
+			const url = artworkId ? `${API_BASE}/artworks/${artworkId}` : `${API_BASE}/artworks`;
+			const method = artworkId ? 'PATCH' : 'POST';
+			const res = await fetch(url, {
+				method,
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify(payload)
+			});
+			if (!res.ok) {
+				const err = await res.json().catch(() => ({}));
+				showToast(err.message || '保存失败，请稍后重试');
+				return;
+			}
+			const data = await res.json();
+			artworkId = data.id;
+			artworkStatus = data.status || 'draft';
+			artworkPrice = data.price ?? null;
+			currentName.textContent = `当前：${data.title || name}`;
+			document.title = `${data.title || name} · 创作工坊`;
+			updateStatusBadge();
+			showToast(`已保存「${data.title || name}」`);
+		};
+
+		const rename = () => {
+			const name = artNameInput.value.trim() || '未命名画作';
+			currentName.textContent = `当前：${name}`;
+			document.title = `${name} · 创作工坊`;
+			showToast(`已重命名为「${name}」`);
+		};
+
+		const listArtwork = async () => {
+			const token = getToken();
+			if (!token) {
+				showToast('请先登录后上架');
+				return;
+			}
+			if (!artworkId) {
+				await saveDraft();
+				if (!artworkId) return;
+			}
+			const input = prompt('输入上架价格（正整数像素币）', artworkPrice ?? '');
+			if (input === null) return;
+			const priceInt = Number.parseInt(input, 10);
+			if (!Number.isInteger(priceInt) || priceInt <= 0) {
+				showToast('价格需为正整数');
+				return;
+			}
+			const res = await fetch(`${API_BASE}/artworks/${artworkId}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ action: 'list', price: priceInt })
+			});
+			if (!res.ok) {
+				showToast('上架失败');
+				return;
+			}
+			const data = await res.json();
+			artworkStatus = data.status || 'listed';
+			artworkPrice = data.price ?? priceInt;
+			updateStatusBadge();
+			showToast('已上架');
+		};
+
+		const unlistArtwork = async () => {
+			const token = getToken();
+			if (!token || !artworkId) {
+				showToast('未找到上架记录');
+				return;
+			}
+			const res = await fetch(`${API_BASE}/artworks/${artworkId}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ action: 'unlist' })
+			});
+			if (!res.ok) {
+				showToast('撤销失败');
+				return;
+			}
+			const data = await res.json();
+			artworkStatus = data.status || 'draft';
+			artworkPrice = null;
+			updateStatusBadge();
+			showToast('已撤销上架，可继续编辑');
+		};
+
+		const loadArtwork = async () => {
+			if (!artworkId) {
+				pushHistory();
+				updateStatusBadge();
+				return;
+			}
+			const token = getToken();
+			if (!token) {
+				updateAuthState('需登录后加载画作');
+				updateStatusBadge();
+				if (!history.length) pushHistory();
+				return;
+			}
+			isLoadingArtwork = true;
+			statusBadge.textContent = '加载画作中...';
+			const res = await fetch(`${API_BASE}/artworks/${artworkId}`, {
+				headers: { Authorization: `Bearer ${token}` }
+			});
+			isLoadingArtwork = false;
+			if (!res.ok) {
+				statusBadge.textContent = '加载失败或无权限';
+				if (!history.length) pushHistory();
+				return;
+			}
+			const data = await res.json();
+			console.log('[loadArtwork] fetched', data);
+			artNameInput.value = data.title || '未命名画作';
+			currentName.textContent = `当前：${data.title || '未命名画作'}`;
+			document.title = `${data.title || '创作工坊'} · 创作工坊`;
+			artworkStatus = data.status || 'draft';
+			artworkPrice = data.price ?? null;
+			hydrateFromData(data.data || {});
+			updateStatusBadge();
+		};
+
+		const init = async () => {
+			await loadPalette();
+			buildGrid();
+			renderInventory();
+			updateSelectedInfo();
+			await loadArtwork();
+			canvasEl.addEventListener('mousedown', handlePointerDown);
+			canvasEl.addEventListener('mousemove', handlePointerMove);
+			canvasEl.addEventListener('contextmenu', (e) => e.preventDefault());
+			document.addEventListener('mouseup', handlePointerUp);
+			undoBtn.addEventListener('click', undo);
+			redoBtn.addEventListener('click', redo);
+			saveBtn.addEventListener('click', () => {
+				saveDraft().catch(() => showToast('保存失败'));
+			});
+			listBtn.addEventListener('click', () => {
+				listArtwork().catch(() => showToast('上架失败'));
+			});
+			unlistBtn.addEventListener('click', () => {
+				unlistArtwork().catch(() => showToast('撤销失败'));
+			});
+			renameBtn.addEventListener('click', rename);
+			eraserBtn.addEventListener('click', () => selectColor('erase'));
+		};
+
+		init();
+
+		// Reload when returning via browser back/forward cache
+		window.addEventListener('pageshow', (e) => {
+			const navEntry = performance.getEntriesByType('navigation')[0];
+			if (e.persisted || navEntry?.type === 'back_forward') {
+				location.reload();
+			}
+		});
+	</script>
+</body>
+
+</html>
